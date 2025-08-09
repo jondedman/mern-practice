@@ -36,6 +36,41 @@ If you haven't already, make sure you have node and NVM installed.
    brew install nvm
    ```
    Then follow the instructions to update your `~/.zshrc`.
+
+
+   ```
+   This message appears after you've installed NVM (Node Version Manager) via Homebrew. NVM is a tool that allows you to install and switch between different versions of Node.js easily, which is essential for this MERN project.
+
+The instructions are telling you to update your shell configuration file (~/.zshrc since you're on Mac) so that NVM will be available every time you open a new terminal.
+
+Here's what you need to do:
+
+Create the NVM directory (if it doesn't exist):
+
+mkdir ~/.nvm
+
+
+Add the NVM configuration to your ~/.zshrc file:
+
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+echo '[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"' >> ~/.zshrc
+echo '[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"' >> ~/.zshrc
+
+Reload your shell configuration:
+
+source ~/.zshrc
+
+Verify NVM is working:
+
+nvm --version
+
+Why you need this: NVM allows you to install Node.js version 20 (as specified in the README) and manage different Node versions for different projects. Without NVM being properly configured, you won't be able to proceed with the next step in the setup process (nvm install 20).
+
+After completing these steps, you can continue with step 3 in the README: installing Node.js version 20.
+
+Similar code found with 1 license type - View matches
+```
+
 2. Open a new terminal
 3. Install the latest version of [Node.js](https://nodejs.org/en/), (`20.5.0` at
    time of writing).

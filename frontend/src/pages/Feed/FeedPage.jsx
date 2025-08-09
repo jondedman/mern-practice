@@ -34,7 +34,7 @@ export function FeedPage() {
   return (
     <>
       <h2>Posts</h2>
-      <div className="feed" role="feed">
+      <div role="feed">
         {posts.map((post) => (
           <Post post={post} key={post._id} />
         ))}

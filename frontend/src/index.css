@@ -1,3 +1,9 @@
+/* * @tailwind directives are valid - ignore editor warnings */
+@tailwind base;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
@@ -23,3 +29,4 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
