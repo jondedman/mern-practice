@@ -4,9 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
+import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+//   const addNewPost = (newPost) => {
+//   console.log("Adding new post:", newPost); // Debug log
+//   console.log("Current posts before:", posts); 
+//   setPosts(prevPosts => [newPost, ...prevPosts]); // Add to beginning
+//   console.log("posts after:", posts);
+  
+
+// };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +40,17 @@ export function FeedPage() {
     return;
   }
 
+  const handlePostCreated = () =>{
+    getPosts(token)
+        .then((data) => {
+      setPosts(data.posts);
+      localStorage.setItem("token", data.token);
+    })
+    .catch((err) => {
+      console.error(err);
+      navigate("/login");
+    });
+  }
   return (
     <>
       <h2>Posts</h2>
@@ -39,6 +59,7 @@ export function FeedPage() {
           <Post post={post} key={post._id} />
         ))}
       </div>
+      <PostForm onPostCreated={handlePostCreated}/>
       <LogoutButton />
     </>
   );
