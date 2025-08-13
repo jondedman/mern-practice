@@ -6,12 +6,21 @@ import { signup } from "../../services/authentication";
 export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  ///
+  const [fullname, setFullname] = useState("")
+  ///
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
+/// Handles validation - all fields must be required 
+    if (!email.trim() || !password.trim() || !fullname.trim()) {
+      alert("All fields are required.");
+      return;
+    }
+///
     try {
-      await signup(email, password);
+      await signup(email, password, fullname);
       navigate("/login");
     } catch (err) {
       console.error(err);
@@ -26,6 +35,12 @@ export function SignupPage() {
   function handlePasswordChange(event) {
     setPassword(event.target.value);
   }
+
+///
+  function handleFullnameChange(event) {
+    setFullname(event.target.value);
+  }
+  ///
 
   return (
     <>
@@ -46,6 +61,18 @@ export function SignupPage() {
           value={password}
           onChange={handlePasswordChange}
         />
+        {/* /// */}
+        <label htmlFor="password">Full Name:</label>
+        <input
+          placeholder="Full name"
+          id="fullname"
+          type="text"
+          value={fullname}
+          onChange={handleFullnameChange}
+        />
+        {/* /// */}
+        
+
         <input role="submit-button" id="submit" type="submit" value="Submit" />
       </form>
     </>
