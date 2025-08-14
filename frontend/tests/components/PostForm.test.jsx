@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
@@ -137,7 +137,7 @@ test("clears the input after successful submission", async () => {
   await user.click(screen.getByRole("button", { name: /submit/i }));
   
   // Wait for async operations to complete
-  await vi.waitFor(() => {
+  await waitFor(() => {
     expect(messageInput.value).toBe("");
   });
 });
