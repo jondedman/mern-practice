@@ -13,4 +13,4 @@ function listenForRequests() {
 
 connectToDatabase().then(() => {
   listenForRequests();
-});
+}); 
