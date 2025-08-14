@@ -24,12 +24,14 @@ vi.mock("../../src/services/authentication", () => {
 async function completeSignupForm() {
   const user = userEvent.setup();
 
+  const fullnameInputEl = screen.getByLabelText("Full Name:");
   const emailInputEl = screen.getByLabelText("Email:");
   const passwordInputEl = screen.getByLabelText("Password:");
   const submitButtonEl = screen.getByRole("submit-button");
 
+  await user.type(fullnameInputEl, "Testy McTest");
   await user.type(emailInputEl, "test@email.com");
-  await user.type(passwordInputEl, "1234");
+  await user.type(passwordInputEl, "abcd1234!");
   await user.click(submitButtonEl);
 }
 
@@ -43,7 +45,7 @@ describe("Signup Page", () => {
 
     await completeSignupForm();
 
-    expect(signup).toHaveBeenCalledWith("test@email.com", "1234");
+    expect(signup).toHaveBeenCalledWith("Testy McTest", "test@email.com", "abcd1234!");
   });
 
   test("navigates to /login on successful signup", async () => {
@@ -56,14 +58,56 @@ describe("Signup Page", () => {
     expect(navigateMock).toHaveBeenCalledWith("/login");
   });
 
-  test("navigates to /signup on unsuccessful signup", async () => {
+  test("displays error when full name not entered", async () => {
     render(<SignupPage />);
+    const user = userEvent.setup();
 
-    signup.mockRejectedValue(new Error("Error signing up"));
-    const navigateMock = useNavigate();
+    // Ensure full name is empty (optional, for clarity)
+    const fullnameInput = screen.getByLabelText("Full Name:");
+    await user.clear(fullnameInput);
 
-    await completeSignupForm();
+    // Fill only email and password, leave full name empty
+    await user.type(screen.getByLabelText("Email:"), "test@email.com");
+    await user.type(screen.getByLabelText("Password:"), "abcd1234!");
+    await user.click(screen.getByRole("submit-button"));
 
-    expect(navigateMock).toHaveBeenCalledWith("/signup");
+    // Assert that the full name error message is displayed
+    expect(await screen.findByText("Full name is required.")).not.toBeNull();
   });
+
+  test("displays error when email not entered", async () => {
+    render(<SignupPage />);
+    const user = userEvent.setup();
+
+    // Ensure email is empty (optional, for clarity)
+    const emailInput = screen.getByLabelText("Email:");
+    await user.clear(emailInput);
+
+    // Fill only Fullname and password, leave email empty
+    await user.type(screen.getByLabelText("Full Name:"), "Testy McTest");
+    await user.type(screen.getByLabelText("Password:"), "abcd1234!");
+    await user.click(screen.getByRole("submit-button"));
+
+    // Assert that the email error message is displayed
+    expect(await screen.findByText("Please enter a valid email address.")).not.toBeNull();
+  });
+
+    test("displays error when password is not entered", async () => {
+    render(<SignupPage />);
+    const user = userEvent.setup();
+
+    // Ensure full name is empty (optional, for clarity)
+    const passwordInput = screen.getByLabelText("Password:");
+    await user.clear(passwordInput);
+
+    // Fill only email and password, leave full name empty
+    await user.type(screen.getByLabelText("Full Name:"), "Testy McTest");
+    await user.type(screen.getByLabelText("Email:"), "test@email.com");
+    await user.click(screen.getByRole("submit-button"));
+
+    // Assert that the full name error message is displayed
+    expect(await screen.findByText("Password must be at least 6 characters and include one symbol: ! @ $ % &")).not.toBeNull();
+  });
+
 });
+

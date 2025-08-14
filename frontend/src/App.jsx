@@ -30,11 +30,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <div>
       {/* <Navbar/>
     <TestIcons/> */}
       <RouterProvider router={router} />
-    </>
+    </div>
   );
 }
 
