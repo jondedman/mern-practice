@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
+import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
@@ -31,6 +32,17 @@ export function FeedPage() {
     return;
   }
 
+  const handlePostCreated = () =>{
+    getPosts(token)
+        .then((data) => {
+      setPosts(data.posts);
+      localStorage.setItem("token", data.token);
+    })
+    .catch((err) => {
+      console.error(err);
+      navigate("/login");
+    });
+  }
   return (
     <>
       <h2>Posts</h2>
@@ -39,7 +51,12 @@ export function FeedPage() {
           <Post post={post} key={post._id} />
         ))}
       </div>
+      <div className="w-full max-w-5xl mx-auto">
+        <PostForm onPostCreated={handlePostCreated} />
+      </div>
+      {/* <PostForm onPostCreated={handlePostCreated}/> */}
       <LogoutButton />
     </>
   );
 }
+
