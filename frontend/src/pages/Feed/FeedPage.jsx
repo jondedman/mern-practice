@@ -51,7 +51,10 @@ export function FeedPage() {
           <Post post={post} key={post._id} />
         ))}
       </div>
-      <PostForm onPostCreated={handlePostCreated}/>
+      <div className="w-full max-w-5xl mx-auto">
+        <PostForm onPostCreated={handlePostCreated} />
+      </div>
+      {/* <PostForm onPostCreated={handlePostCreated}/> */}
       <LogoutButton />
     </>
   );

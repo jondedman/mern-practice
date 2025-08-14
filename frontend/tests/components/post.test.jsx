@@ -13,15 +13,6 @@ describe("Post", () => {
   });
 });
 
-// describe("Post Form", () => {
-//   test("displays a message input box", () => {
-//     const input = screen.getByRole('textbox', { name: 'What\'s on your mind?'  });
-//     expect(input).toBeInTheDocument();
-//   })
-// })
-
-
-
 test("renders with an input box", () => {
   // Setup - rendering the component on the page
   render(<PostForm />);
@@ -37,7 +28,6 @@ test("renders with a button", () => {
 
   // Assert
   expect(screen.getByRole("button")).to.exist;
-
 });
 
 test("renders with a button of type submit", () => {
