@@ -95,15 +95,13 @@ test("makes correct API call with message and timestamp", async () => {
     })
   );
 });
-});
-
 test("handles API errors gracefully", async () => {
   const user = userEvent.setup();
   const mockOnPostCreated = vi.fn();
   const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   
   // Mock a failed API response
-  fetch.mockResolvedValueOnce({
+  mockFetch.mockResolvedValueOnce({
     ok: false,
     status: 400,
   });
@@ -124,7 +122,7 @@ test("clears the input after successful submission", async () => {
   const user = userEvent.setup();
   const mockOnPostCreated = vi.fn();
   
-  fetch.mockResolvedValueOnce({
+  mockFetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ id: 1 }),
   });
@@ -141,3 +139,5 @@ test("clears the input after successful submission", async () => {
     expect(messageInput.value).toBe("");
   });
 });
+});
+
