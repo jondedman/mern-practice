@@ -22,7 +22,7 @@ describe("Post", () => {
 
 
 
-test("renders with the correct title ", () => {
+test("renders with an input box", () => {
   // Setup - rendering the component on the page
   render(<PostForm />);
 
@@ -30,4 +30,25 @@ test("renders with the correct title ", () => {
   expect(screen.getByPlaceholderText(/What's on your mind\?/i)).to.exist;
 
 });
+
+test("renders with a button", () => {
+  // Setup - rendering the component on the page
+  render(<PostForm />);
+
+  // Assert
+  expect(screen.getByRole("button")).to.exist;
+
+});
+
+test("renders with a button of type submit", () => {
+  // Setup - rendering the component on the page
+  render(<PostForm />);
+  const submitButton = screen.getByRole("button");
+  console.log("Button type:", submitButton.type); 
+  // Assert
+  expect(submitButton.type).toBe("submit");
+
+});
+
+
 
