@@ -32,6 +32,17 @@ export function FeedPage() {
     return;
   }
 
+  const handlePostCreated = () =>{
+    getPosts(token)
+        .then((data) => {
+      setPosts(data.posts);
+      localStorage.setItem("token", data.token);
+    })
+    .catch((err) => {
+      console.error(err);
+      navigate("/login");
+    });
+  }
   return (
     <>
       <h2>Posts</h2>
@@ -40,8 +51,9 @@ export function FeedPage() {
           <Post post={post} key={post._id} />
         ))}
       </div>
-      <PostForm />
+      <PostForm onPostCreated={handlePostCreated}/>
       <LogoutButton />
     </>
   );
 }
+
