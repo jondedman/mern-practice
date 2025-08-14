@@ -130,6 +130,7 @@ export function SignupPage() {
 
   return (
     <>
+      <h1>Dòómbook</h1>
       <h2>Signup</h2>
       {generalError && <div style={{ color: "red" }}>{generalError}</div>}
       <form onSubmit={handleSubmit}>
