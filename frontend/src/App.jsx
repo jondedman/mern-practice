@@ -7,6 +7,7 @@ import { SignupPage } from "./pages/Signup/SignupPage";
 import { FeedPage } from "./pages/Feed/FeedPage";
 import Navbar from "./components/Navbar";
 import TestIcons from "./components/TestIcons";
+import ThemeSwitcher from "./components/ThemeSwitcher";
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -33,6 +34,7 @@ function App() {
     <>
       {/* <Navbar/>
     <TestIcons/> */}
+    <ThemeSwitcher/>
       <RouterProvider router={router} />
     </>
   );
