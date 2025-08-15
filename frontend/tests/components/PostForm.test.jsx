@@ -139,5 +139,29 @@ test("clears the input after successful submission", async () => {
     expect(messageInput.value).toBe("");
   });
 });
+
+test("shows error when trying to submit an empty message", async () => {
+  const user = userEvent.setup();
+  const mockOnPostCreated = vi.fn();
+
+  render(<PostForm onPostCreated={mockOnPostCreated} />);
+
+  // Submit the form without typing anything
+  const submitButton = screen.getByRole("button", { name: /submit/i });
+  await user.click(submitButton);
+
+  // Check that an error is shown
+  const errorMessage = await screen.findByText("Post cannot be empty.");
+  expect(errorMessage).to.exist;
+
+  // Make sure the callback wasn't called
+  expect(mockOnPostCreated).not.toHaveBeenCalled();
+
+  // Make sure fetch wasn't called
+  expect(mockFetch).not.toHaveBeenCalled();
 });
+
+});
+
+
 
