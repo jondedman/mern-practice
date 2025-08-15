@@ -1,7 +1,5 @@
-import daisyui from 'daisyui';
-
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -14,6 +12,10 @@ export default {
     },
   },
   plugins: [
-    daisyui,
+    require('daisyui')
   ],
+  daisyui: {
+    themes: ["light", "dark", "cupcake", "valentine"],
+  },
 }
+// use of common module exports (require, and module.exports is necessary for daisyUI plugin to work with tailwind)

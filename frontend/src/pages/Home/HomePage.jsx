@@ -11,7 +11,7 @@ export function HomePage() {
       <br></br>
       <h2>The Anti-Social Network</h2>
       <br></br>
-      <button className="btn bg-secondary">
+      <button className="btn bg-accent">
         <Link to="/signup" className="text-white">Sign Up</Link>
       </button>
       <br></br>

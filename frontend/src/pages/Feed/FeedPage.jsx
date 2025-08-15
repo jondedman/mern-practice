@@ -8,6 +8,14 @@ import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+//   const addNewPost = (newPost) => {
+//   console.log("Adding new post:", newPost); // Debug log
+//   console.log("Current posts before:", posts); 
+//   setPosts(prevPosts => [newPost, ...prevPosts]); // Add to beginning
+//   console.log("posts after:", posts);
+  
+
+// };
   const navigate = useNavigate();
 
   useEffect(() => {
