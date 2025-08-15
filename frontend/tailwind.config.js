@@ -18,3 +18,4 @@ module.exports = {
     themes: ["light", "dark", "cupcake", "valentine"],
   },
 }
+// use of common module exports (require, and module.exports is necessary for daisyUI plugin to work with tailwind)

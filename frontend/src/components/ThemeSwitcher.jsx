@@ -1,5 +1,8 @@
+// This component is just to check that the themes can be switched.
+
 function ThemeSwitcher() {
   const setTheme = (themeName) => {
+    // The theme can be set manually in index.html
     document.documentElement.setAttribute('data-theme', themeName);
     console.log('Theme changed to:', themeName);
     console.log('Current theme attribute:', document.documentElement.getAttribute('data-theme'));
