@@ -36,14 +36,16 @@ function PostForm({onPostCreated}) {
     });
     if (response.ok) {
         const newPost = await response.json();
+        console.log("✅ New post from server:", newPost);
+        
 
         // Call the function passed from FeedPage
-        onPostCreated();
+        onPostCreated(newPost);
 
         console.log("Post created successfully:", newPost);
         setMessage(""); // Clear the form after successful submission
         // might want to update the posts list here or trigger a re-fetch
-        setError(); //Clear any previous error 
+        setError(""); //Clear any previous error 
         } else {
         console.error("Failed to create post:", response.status);
         }

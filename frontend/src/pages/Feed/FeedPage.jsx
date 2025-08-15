@@ -8,14 +8,6 @@ import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
-//   const addNewPost = (newPost) => {
-//   console.log("Adding new post:", newPost); // Debug log
-//   console.log("Current posts before:", posts); 
-//   setPosts(prevPosts => [newPost, ...prevPosts]); // Add to beginning
-//   console.log("posts after:", posts);
-  
-
-// };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,23 +26,18 @@ export function FeedPage() {
     }
   }, [navigate]);
 
+
+
   const token = localStorage.getItem("token");
   if (!token) {
     navigate("/login");
     return;
   }
 
-  const handlePostCreated = () =>{
-    getPosts(token)
-        .then((data) => {
-      setPosts(data.posts);
-      localStorage.setItem("token", data.token);
-    })
-    .catch((err) => {
-      console.error(err);
-      navigate("/login");
-    });
-  }
+  const handlePostCreated = (newPost) => {
+  setPosts(prevPosts => [newPost, ...prevPosts]); 
+};
+
   return (
     <>
       <h2>Posts</h2>
@@ -59,12 +46,8 @@ export function FeedPage() {
           <Post post={post} key={post._id} />
         ))}
       </div>
-      <div className="w-full max-w-5xl mx-auto">
-        <PostForm onPostCreated={handlePostCreated} />
-      </div>
-      {/* <PostForm onPostCreated={handlePostCreated}/> */}
+      <PostForm onPostCreated={handlePostCreated}/>
       <LogoutButton />
     </>
   );
 }
-
