@@ -5,9 +5,7 @@ import { HomePage } from "./pages/Home/HomePage";
 import { LoginPage } from "./pages/Login/LoginPage";
 import { SignupPage } from "./pages/Signup/SignupPage";
 import { FeedPage } from "./pages/Feed/FeedPage";
-import Navbar from "./components/Navbar";
-import TestIcons from "./components/TestIcons";
-import ThemeSwitcher from "./components/ThemeSwitcher";
+
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -32,9 +30,6 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div>
-      {/* <Navbar/>
-    <TestIcons/> */}
-    <ThemeSwitcher/>
       <RouterProvider router={router} />
     </div>
   );
