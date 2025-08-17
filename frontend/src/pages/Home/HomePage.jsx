@@ -5,7 +5,7 @@ import "./HomePage.css";
 export function HomePage() {
   return (
   <div className="home">
-   <div class="flex justify-center items-center h-screen">
+   <div className="flex justify-center items-center h-screen">
     <div>
       <h1>Welcome to Dòómbook</h1>
       <br></br>
