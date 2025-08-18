@@ -8,12 +8,14 @@ import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState("all"); // ✅ lowercase to match check
   const navigate = useNavigate();
+
+  const currentUserId = localStorage.getItem("user_id"); // ✅ not the token!
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const loggedIn = token !== null;
-    if (loggedIn) {
+    if (token) {
       getPosts(token)
         .then((data) => {
           setPosts(data.posts);
@@ -23,41 +25,61 @@ export function FeedPage() {
           console.error(err);
           navigate("/login");
         });
+    } else {
+      navigate("/login");
     }
   }, [navigate]);
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  const handlePostCreated = () =>{
+  const handlePostCreated = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/login");
     getPosts(token)
-        .then((data) => {
-      setPosts(data.posts);
-      localStorage.setItem("token", data.token);
-    })
-    .catch((err) => {
-      console.error(err);
-      navigate("/login");
-    });
-  }
+      .then((data) => {
+        setPosts(data.posts);
+        localStorage.setItem("token", data.token);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/login");
+      });
+  };
 
+  // ✅ filter logic
+  const filteredPosts = posts.filter((post) => {
+    if (filter === "all") {
+      
+      return true;
+    } else {
+      return post.author === currentUserId || post.author?._id === currentUserId;
+    }
+  });
 
   return (
     <>
       <h2>Posts</h2>
+
+      <button
+        type="button"
+          onClick={() => {
+            console.log("button clicked!");
+            setFilter(filter === "all" ? "mine" : "all");
+          }}
+>
+  {filter === "all" ? "Show My Posts" : "Show All Posts"}
+</button>
+
+
       <div role="feed">
-        {posts.map((post) => (
-          <Post post={post} key={post._id}/>
+        {filteredPosts.map((post) => (
+          <Post post={post} key={post._id} />
         ))}
       </div>
+
       <div className="w-full max-w-5xl mx-auto">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
+
       <LogoutButton />
     </>
   );
 }
-
