@@ -25,7 +25,7 @@ let user; //new line
 let token;
 
 describe("/posts", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await User.deleteMany({});
     await Post.deleteMany({});
 
@@ -37,11 +37,6 @@ describe("/posts", () => {
 
     await user.save();
     token = createToken(user.id);
-  });
-
-  afterEach(async () => {
-    await User.deleteMany({});
-    await Post.deleteMany({});
   });
 
   describe("POST, when a valid token is present", () => {
