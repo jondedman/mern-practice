@@ -282,13 +282,10 @@ export function SignupPage() {
                 error={passwordError}
               />
 
-              <input
-                role="submit-button"
-                id="submit"
-                type="submit"
-                value="Submit"
-                className="btn bg-primary btn-wide text-white"
-              />
+              <button type="submit" className="btn bg-primary btn-wide text-white">
+                Submit
+              </button>
+
             </form>
           </div>
         </main>
