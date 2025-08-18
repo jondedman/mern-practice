@@ -54,7 +54,7 @@ function PostForm({onPostCreated}) {
     };
 
     return (
-    <form onSubmit={handleSubmit} className='m-4 max-w- mx-auto space-y-4'>
+    <form onSubmit={handleSubmit} className='m-4 max-width-auto mx-auto space-y-4'>
         <textarea 
             type="text" 
             name="message" 
@@ -62,7 +62,7 @@ function PostForm({onPostCreated}) {
             onChange={handleChange}
             placeholder="What's on your mind?"
             rows="4"
-            className="textarea textarea-bordered rounded-xl w-[800px] "
+            className="textarea textarea-bordered rounded-xl w-[562px] "
         />
 
         {error && (
