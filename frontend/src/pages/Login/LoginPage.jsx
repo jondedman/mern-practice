@@ -3,20 +3,25 @@ import { useNavigate } from "react-router-dom";
 
 import { login } from "../../services/authentication";
 
+import dLogo from "../../assets/d.png"; // import the image
+
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); 
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setError(""); 
+
     try {
       const token = await login(email, password);
       localStorage.setItem("token", token);
       navigate("/posts");
     } catch (err) {
       console.error(err);
-      navigate("/login");
+      setError("Incorrect email or password");    
     }
   }
 
@@ -28,27 +33,65 @@ export function LoginPage() {
     setPassword(event.target.value);
   }
 
+ 
   return (
-    <>
-      <h1>Dòómbook</h1>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={handleEmailChange}
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <input role="submit-button" id="submit" type="submit" value="Submit" />
-      </form>
-    </>
+    <div className="home bg-[#632c3b] text-base-content min-h-screen w-full flex flex-col">
+          
+      {/* Header */}
+      <header className="bg-neutral text-white py-4 px-6 flex justify-between items-center">
+        <h1 className="text-xl font-bold flex items-center gap-2">
+          <img src={dLogo} alt="Logo" className="w-8 h-8" />
+          dòómbook
+        </h1>
+        <nav className="flex gap-4">
+          {/* Add navigation links here if needed */}
+        </nav>
+      </header>
+
+      <main className="flex flex-col justify-center items-center flex-1 text-center space-y-6">
+      <h2 className="text-white text-6xl font-bold">dòómbook</h2>
+      <p className="text-white text-3xl font-semibold">Login</p>
+      
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-sm mx-auto">
+
+        <div className="flex flex-col">
+        <label htmlFor="email" className="text-white">Email:</label>
+          <input
+            id="email"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmailChange}
+            className="p-1 rounded"
+          />
+        </div>
+
+        <div className="flex flex-col">
+        <label htmlFor="password" className="text-white">Password:</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="p-1 rounded"
+          />
+        </div>
+
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+      <div className="flex justify-center">
+        <input role="submit-button" id="submit" type="submit" value="Submit" className="btn bg-primary text-white flex justify-center"/>
+      </div>
+
+        </form>
+      </main>
+
+      <footer className="bg-neutral text-white py-4 text-center">
+        <p>MERN {"'n'"} BURN {new Date().getFullYear()} © All rights reserved.</p>
+      </footer>
+
+      
+    </div>
   );
 }

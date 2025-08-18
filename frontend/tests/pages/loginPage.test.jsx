@@ -29,7 +29,7 @@ async function completeLoginForm() {
   const submitButtonEl = screen.getByRole("submit-button");
 
   await user.type(emailInputEl, "test@email.com");
-  await user.type(passwordInputEl, "1234");
+  await user.type(passwordInputEl, "abcd1234!");
   await user.click(submitButtonEl);
 }
 
@@ -43,7 +43,7 @@ describe("Login Page", () => {
 
     await completeLoginForm();
 
-    expect(login).toHaveBeenCalledWith("test@email.com", "1234");
+    expect(login).toHaveBeenCalledWith("test@email.com", "abcd1234!");
   });
 
   test("navigates to /posts on successful login", async () => {
@@ -57,14 +57,43 @@ describe("Login Page", () => {
     expect(navigateMock).toHaveBeenCalledWith("/posts");
   });
 
-  test("navigates to /login on unsuccessful login", async () => {
+  test("displays error when email not entered", async () => {
     render(<LoginPage />);
+    const user = userEvent.setup();
 
-    login.mockRejectedValue(new Error("Error logging in"));
-    const navigateMock = useNavigate();
+    // Make login fail
+    login.mockRejectedValue(new Error("Login failed"));
 
-    await completeLoginForm();
+    // Ensure email is empty (optional, for clarity)
+    const emailInput = screen.getByLabelText("Email:");
+    await user.clear(emailInput);  
 
-    expect(navigateMock).toHaveBeenCalledWith("/login");
+    // Fill only email, leave password empty
+    await user.type(screen.getByLabelText("Email:"), "test@email.com");
+    await user.click(screen.getByRole("submit-button"));
+
+    // Assert that error message is displayed
+    expect(await screen.findByText("Incorrect email or password")).not.toBeNull();
   });
+
+  test("displays error when password not entered", async () => {
+    render(<LoginPage />);
+    const user = userEvent.setup();
+
+    // Make login fail
+    login.mockRejectedValue(new Error("Login failed"));
+
+    // Ensure password is empty (optional, for clarity)
+    const passwordInput = screen.getByLabelText("Password:");
+    await user.clear(passwordInput);  
+
+    // Fill only password, leave email empty
+    await user.type(screen.getByLabelText("Password:"), "abcd1234!");
+    await user.click(screen.getByRole("submit-button"));
+
+    // Assert that error message is displayed
+    expect(await screen.findByText("Incorrect email or password")).not.toBeNull();
+  });
+
+
 });
