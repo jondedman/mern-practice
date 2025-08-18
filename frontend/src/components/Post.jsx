@@ -32,7 +32,7 @@ const Post = (props) => {
       <figure>
         <img
           src={ randomPicUrl || "/Gemini_Generated_Image_2j1wty2j1wty2j1w.png" } 
-          alt="Post content" 
+          alt="Post Image" 
           className="w-full object-cover"
           loading="lazy"
         />
