@@ -1,7 +1,5 @@
 import { render, screen } from "@testing-library/react";
-
 import Post from "../../src/components/Post";
-import PostForm from "../../src/components/PostForm";
 
 describe("Post", () => {
   test("displays the message as an article", () => {
@@ -11,34 +9,27 @@ describe("Post", () => {
     const article = screen.getByRole("article");
     expect(article.textContent).toBe("test message");
   });
-});
 
-test("renders with an input box", () => {
+  test("renders with 2 buttons, like and comment", () => {
   // Setup - rendering the component on the page
-  render(<PostForm />);
-
+  const testPost = { _id: "123", message: "test message" };
+  render(<Post post={testPost} />);
+  const buttons = screen.getAllByRole("button");
   // Assert
-  expect(screen.getByPlaceholderText(/What's on your mind\?/i)).to.exist;
-
+  expect(buttons.length).toBe(2);
+  expect(buttons[0].textContent).toBe("Like");
+  expect(buttons[1].textContent).toBe("Comment");
 });
-
-test("renders with a button", () => {
+  test("renders with an image", () => {
   // Setup - rendering the component on the page
-  render(<PostForm />);
-
-  // Assert
-  expect(screen.getByRole("button")).to.exist;
-});
-
-test("renders with a button of type submit", () => {
-  // Setup - rendering the component on the page
-  render(<PostForm />);
-  const submitButton = screen.getByRole("button");
-  console.log("Button type:", submitButton.type); 
-  // Assert
-  expect(submitButton.type).toBe("submit");
+  const testPost = { _id: "123", message: "test message" };
+  render(<Post post={testPost} />);
+  expect(screen.getByAltText("Post Image")).to.exist
+  });
 
 });
+
+
 
 
 
