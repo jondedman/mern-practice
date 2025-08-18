@@ -8,14 +8,6 @@ import PostForm from "../../components/PostForm";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
-//   const addNewPost = (newPost) => {
-//   console.log("Adding new post:", newPost); // Debug log
-//   console.log("Current posts before:", posts); 
-//   setPosts(prevPosts => [newPost, ...prevPosts]); // Add to beginning
-//   console.log("posts after:", posts);
-  
-
-// };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,18 +43,19 @@ export function FeedPage() {
       navigate("/login");
     });
   }
+
+
   return (
     <>
       <h2>Posts</h2>
       <div role="feed">
         {posts.map((post) => (
-          <Post post={post} key={post._id} />
+          <Post post={post} key={post._id}/>
         ))}
       </div>
       <div className="w-full max-w-5xl mx-auto">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
-      {/* <PostForm onPostCreated={handlePostCreated}/> */}
       <LogoutButton />
     </>
   );
