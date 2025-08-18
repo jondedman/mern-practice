@@ -24,7 +24,7 @@ const Post = (props) => {
 
         {/* Post Content */}
         <div className="py-3">
-          <p className="text-sm" key={props.post._id}>{props.post.message}</p>
+          <article className="text-sm" key={props.post._id}>{props.post.message}</article>
         </div>
       </div>
 
