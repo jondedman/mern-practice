@@ -44,20 +44,21 @@ export function FeedPage() {
     });
   }
 
-
   return (
-    <>
-      <h2>Posts</h2>
-      <div role="feed">
-        {posts.map((post) => (
-          <Post post={post} key={post._id}/>
-        ))}
+    <div className="min-h-screen bg-base-100"> {/* Main container */}
+      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
+        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
+        {/* Post Form */}
+        <div className="max-w-lg mx-auto w-full mb-4">
+          <PostForm onPostCreated={handlePostCreated} />
+        </div>
+        {/* Posts Feed */}
+        <div role="feed" className="flex-1 overflow-y-auto">
+          {posts.map((post) => (
+            <Post post={post} key={post._id}/>
+          ))}
+        </div>   
       </div>
-      <div className="w-full max-w-5xl mx-auto">
-        <PostForm onPostCreated={handlePostCreated} />
-      </div>
-      <LogoutButton />
-    </>
+    </div>
   );
 }
-
