@@ -12,8 +12,8 @@ describe("Home Page", () => {
       </BrowserRouter>
     );
 
-    const heading = screen.getByRole("heading", { level: 1 });
-    expect(heading.textContent).toEqual("dòómbook");
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading.textContent).toEqual("Welcome to dòómbook");
   });
 
   test("Displays a signup link", async () => {
