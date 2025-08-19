@@ -2,7 +2,6 @@ import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 
 const Post = (props) => {
-  console.log("props",props);
   const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
