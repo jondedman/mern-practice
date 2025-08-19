@@ -62,3 +62,7 @@ describe("Feed Page", () => {
     expect(navigateMock).toHaveBeenCalledWith("/login");
   });
 });
+
+describe("Comments modal", () => {
+  
+})
