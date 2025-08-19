@@ -2,16 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
-import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
 import CommentsModal from "../../components/CommentsModal";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [comments, setComments] = useState(["coment1", "comment2", "comment3"]);
+  const [comments, setComments] = useState([{id: "1", comment: "coment1"},{id: "2", comment: "comment2"},{id: "3", comment: "comment3"},{id: "4", comment: "coment4"},{id: "5", comment: "comment5"},{id: "6", comment: "comment6"}]);
 
-  const handleCommentClick = (post) => setSelectedPost(post);
+  const handleCommentClick = (post) => {
+    console.log("called hcc, with post: ", post);
+    
+  setSelectedPost(post);
+  console.log(selectedPost);
+  
+  }
+    
   const handleCloseModal = () => setSelectedPost(null);
   const navigate = useNavigate();
 
@@ -59,6 +65,7 @@ export function FeedPage() {
           {posts.map((post) => (
             <Post post={post} key={post._id} onCommentClick={handleCommentClick} />
           ))}
+          {/* renders based on whether there is a selected post */}
                 {selectedPost && (
         <CommentsModal
           post={selectedPost}
