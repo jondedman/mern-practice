@@ -46,18 +46,20 @@ export function FeedPage() {
 
 
   return (
-    <>
+    <div className="home bg-neutral-content text-base-content min-h-screen w-full flex flex-col">
+
       <h2>Posts</h2>
-      <div role="feed">
+      <div role="feed" className="bg-base-100 max-w-auto mx-auto mt-10 p-6 border rounded-lg shadow-md">
         {posts.map((post) => (
           <Post post={post} key={post._id}/>
         ))}
+        
       </div>
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="mx-auto">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
       <LogoutButton />
-    </>
+    </div>
   );
 }
 

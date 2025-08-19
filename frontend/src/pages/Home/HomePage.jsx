@@ -63,7 +63,7 @@ import dLogo from "../../assets/d.png"; // import the image
 export function HomePage() {
   return (
 
-    <div className="home bg-[#632c3b] text-base-content min-h-screen w-full flex flex-col">
+    <div className="home bg-base-content text-base-content min-h-screen w-full flex flex-col">
       
       {/* Header */}
       <header className="bg-neutral text-white py-4 px-6 flex justify-between items-center">
