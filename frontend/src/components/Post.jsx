@@ -1,8 +1,8 @@
 import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 
-const Post = (props) => {
-  const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
+const Post = ({post, onCommentClick}) => {
+  const randomPicUrl = `https://picsum.photos/600/400?random=${post._id}`;
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
       {/* Post Header */}
@@ -18,13 +18,13 @@ const Post = (props) => {
           </div>
           <div>
             <h3 className="font-semibold text-sm">Darth Vader</h3>
-            <p className="text-xs text-base-content/60">{timeAgo(props.post.createdAt)}</p>
+            <p className="text-xs text-base-content/60">{timeAgo(post.createdAt)}</p>
           </div>
         </div>
 
         {/* Post Content */}
         <div className="py-3">
-          <article className="text-sm" key={props.post._id}>{props.post.message}</article>
+          <article className="text-sm" key={post._id}>{post.message}</article>
         </div>
       </div>
 
@@ -52,7 +52,7 @@ const Post = (props) => {
             <FaThumbsUp />
             Like
           </button>
-          <button className="btn btn-ghost btn-sm flex-1 gap-2">
+          <button onClick={() => onCommentClick(post)} className="btn btn-ghost btn-sm flex-1 gap-2">
             <FaCommentAlt />
             Comment
           </button>

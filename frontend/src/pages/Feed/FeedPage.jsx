@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
+import CommentsModal from "../../components/CommentsModal";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [comments, setComments] = useState(["coment1", "comment2", "comment3"]);
+
+  const handleCommentClick = (post) => setSelectedPost(post);
+  const handleCloseModal = () => setSelectedPost(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,8 +57,15 @@ export function FeedPage() {
         {/* Posts Feed */}
         <div role="feed" className="flex-1 overflow-y-auto">
           {posts.map((post) => (
-            <Post post={post} key={post._id}/>
+            <Post post={post} key={post._id} onCommentClick={handleCommentClick} />
           ))}
+                {selectedPost && (
+        <CommentsModal
+          post={selectedPost}
+          comments={comments}
+          onClose={handleCloseModal}
+        />
+      )}
         </div>
                 {/* Post Form */}
         <div className="max-w-lg mx-auto w-full mb-4">
