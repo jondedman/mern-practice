@@ -3,22 +3,22 @@ const User = require("./models/user");
 const Post = require("./models/post");
 require("dotenv").config();
 
-async function connectToDatabase() {
-    const mongoDbUrl = process.env.MONGODB_URL;
+// async function connectToDatabase() {
+//     const mongoDbUrl = process.env.MONGODB_URL;
 
-    if (!mongoDbUrl) {
-        console.error(
-            "No MongoDB url provided. Make sure there is a MONGODB_URL environment variable set. See the README for more details."
-        );
-        throw new Error("No connection string provided");
-    }
+//     if (!mongoDbUrl) {
+//         console.error(
+//             "No MongoDB url provided. Make sure there is a MONGODB_URL environment variable set. See the README for more details."
+//         );
+//         throw new Error("No connection string provided");
+//     }
 
-    await mongoose.connect(mongoDbUrl);
+//     await mongoose.connect(mongoDbUrl);
 
-    if (process.env.NODE_ENV !== "test") {
-        console.log("Successfully connected to MongoDB");
-    }
-}
+//     if (process.env.NODE_ENV !== "test") {
+//         console.log("Successfully connected to MongoDB");
+//     }
+// }
 
 const postContents = [
   { message: "Just because you’re plotting world domination doesn’t mean you can’t stop to smell the roses… then genetically enhance them to spit acid.", createdAt: new Date("2025-08-01T09:00:00Z") },
@@ -41,38 +41,16 @@ const postContents = [
   { message: "It’s okay to outgrow people. Especially when you grow into a 30-foot mech suit.", createdAt: new Date("2025-08-18T19:10:00Z") }
 ];
 
-const seedPosts = async () => {
-    await connectToDatabase();
+async function seedPosts(users) {
+  await Post.deleteMany({});
 
-    try {
-        await Post.deleteMany({});
-        const users = await User.find({});
+  const postsWithUsers = postContents.map((postData, i) => ({
+    ...postData,
+    author: users[i % users.length]._id, // cycle through users
+  }));
 
-        if (!users.length) {
-            console.log("No users found. Seed users first.");
-            process.exit(1);
-        }
+  const posts = await Post.insertMany(postsWithUsers);
+  return posts;
+}
 
-        for (let i = 0; i < postContents.length; i++) {
-            const postData = postContents[i];
-
-            const post = new Post({
-                message: postData.message,
-                author: users[i % users.length]._id, // cycle through users
-                ...(postData.createdAt ? { createdAt: postData.createdAt } : {}) // only use if provided
-            });
-
-            await post.save();
-        }
-
-        console.log("Posts created successfully.");
-        await mongoose.disconnect();
-        process.exit(0);
-    } catch (err) {
-        console.error("Error seeding posts:", err);
-        await mongoose.disconnect();
-        process.exit(1);
-    }
-};
-
-seedPosts();
+module.exports = seedPosts;
