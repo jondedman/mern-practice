@@ -47,7 +47,7 @@ const Like = () => {
       onClick={toggleLike}
       className={`btn btn-ghost btn-sm flex-1 gap-2 ${hasLiked ? "text-primary" : "text-accent"}`}
     >
-      {hasLiked ? <FaThumbsUp /> : <FaRegThumbsUp />}
+      {hasLiked ? <FaThumbsUp data-testid = "liked" /> : <FaRegThumbsUp data-testid = "unliked" />}
       Like
     </button>
   );
