@@ -5,8 +5,6 @@ import Footer from "../../components/Footer";
 
 import { login } from "../../services/authentication";
 
-import dLogo from "../../assets/d.png"; // import the image
-
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +36,7 @@ export function LoginPage() {
  
   return (
     <div className="home bg-[#632c3b] text-base-content min-h-screen w-full flex flex-col">
-      <Header />
+      <Header showNav={true} />
 
       <main className="flex flex-col justify-center items-center flex-1 text-center space-y-6">
       <h2 className="text-white text-6xl font-bold">dòómbook</h2>
@@ -79,11 +77,7 @@ export function LoginPage() {
         </form>
       </main>
 
-      <footer className="bg-neutral text-white py-4 text-center">
-        <p>MERN {"'n'"} BURN {new Date().getFullYear()} © All rights reserved.</p>
-      </footer>
-
-      
+      <Footer />
     </div>
   );
 }

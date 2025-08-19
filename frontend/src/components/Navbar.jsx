@@ -85,9 +85,9 @@ function NavBar() {
 
   return (
     <nav className="flex gap-4">
-      {location.pathname !== "/signup" && <Link to="/signup">Sign Up</Link>}
-      {location.pathname !== "/login" && <Link to="/login">Log In</Link>}
-      {location.pathname !== "/homepage" && <Link to="/homepage">Home</Link>}
+      {location.pathname !== "/signup" && <Link to="/signup" className="btn bg-primary-content text-white">Sign Up</Link>}
+      {location.pathname !== "/login" && <Link to="/login" className="btn bg-primary-content text-white">Log In</Link>}
+      {location.pathname !== "/homepage" && <Link to="/" className="btn bg-primary-content text-white">Home</Link>}
     </nav>
   );
 }

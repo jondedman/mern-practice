@@ -177,6 +177,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../services/authentication";
 import { InputField } from "../../components/InputField";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import dLogo from "../../assets/d.png";
 
 export function SignupPage() {
@@ -232,17 +234,7 @@ export function SignupPage() {
   return (
     
     <div className="home bg-[#632c3b] text-base-content min-h-screen w-full flex flex-col">
-      
-      {/* Header */}
-      <header className="bg-neutral text-white py-4 px-6 flex justify-between items-center">
-        <h1 className="text-xl font-bold flex items-center gap-2">
-          <img src={dLogo} alt="Logo" className="w-8 h-8" />
-            dòómbook
-          </h1>
-          <nav className="flex gap-4">
-            {/* Add navigation links here if needed */}
-          </nav>
-      </header>
+      <Header showNav={true}/>
       
         <main className="flex-grow">
           <div className="bg-base-100 max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-md">
@@ -289,11 +281,8 @@ export function SignupPage() {
             </form>
           </div>
         </main>
-
-      <footer className="bg-neutral text-white py-4 text-center">
-        <p>MERN 'n' BURN {new Date().getFullYear()} © All rights reserved.</p>
-      </footer>
-
+        
+    <Footer />
     </div>  
   );
 }
