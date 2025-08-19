@@ -5,13 +5,14 @@ import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
+import ToggleSwitch from "../../components/ToggleSwitch";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
-  const [filter, setFilter] = useState("all"); // ✅ lowercase to match check
+  const [filter, setFilter] = useState("all"); 
   const navigate = useNavigate();
 
-  const currentUserId = localStorage.getItem("user_id"); // ✅ not the token!
+  const currentUserId = localStorage.getItem("user_id");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -44,7 +45,6 @@ export function FeedPage() {
       });
   };
 
-  // ✅ filter logic
   const filteredPosts = posts.filter((post) => {
     if (filter === "all") {
       
@@ -57,18 +57,14 @@ export function FeedPage() {
   return (
     <>
       <h2>Posts</h2>
-
-      <button
-        type="button"
-          onClick={() => {
-            console.log("button clicked!");
-            setFilter(filter === "all" ? "mine" : "all");
-          }}
->
-  {filter === "all" ? "Show My Posts" : "Show All Posts"}
-</button>
-
-
+<div className="flex justify-center my-4">
+    <ToggleSwitch
+      label={filter === "all" ? "Show My Posts" : "Show All Posts"}
+      checked={filter === "mine"}
+      onChange={() => setFilter(filter === "all" ? "mine" : "all")}
+    />
+</div>
+  
       <div role="feed">
         {filteredPosts.map((post) => (
           <Post post={post} key={post._id} />
