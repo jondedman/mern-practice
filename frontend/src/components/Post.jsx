@@ -1,8 +1,8 @@
 import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
+import timeAgo from "../services/timeAgo";
 
 const Post = (props) => {
   const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
-
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
       {/* Post Header */}
@@ -18,7 +18,7 @@ const Post = (props) => {
           </div>
           <div>
             <h3 className="font-semibold text-sm">Darth Vader</h3>
-            <p className="text-xs text-base-content/60">2 hours ago</p>
+            <p className="text-xs text-base-content/60">{timeAgo(props.post.createdAt)}</p>
           </div>
         </div>
 
@@ -40,8 +40,8 @@ const Post = (props) => {
           {/* Engagement Stats */}
         <div className="card-body pt-3 pb-2">
           <div className="flex justify-between items-center text-xs text-base-content/60 pb-2 border-b border-base-300">
-              <span>👍 24 people</span>
-            <span>5 comments </span>
+              <span>👍 {Math.ceil(Math.random()*100 + 1)} people</span>
+            <span>{Math.ceil(Math.random()*100 + 1)} comments </span>
             </div>
         </div>
 

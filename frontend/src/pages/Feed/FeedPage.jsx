@@ -16,7 +16,7 @@ export function FeedPage() {
     if (loggedIn) {
       getPosts(token)
         .then((data) => {
-          setPosts(data.posts);
+          setPosts(data.posts.reverse());
           localStorage.setItem("token", data.token);
         })
         .catch((err) => {
@@ -35,7 +35,7 @@ export function FeedPage() {
   const handlePostCreated = () =>{
     getPosts(token)
         .then((data) => {
-      setPosts(data.posts);
+      setPosts(data.posts.reverse());
       localStorage.setItem("token", data.token);
     })
     .catch((err) => {
@@ -44,22 +44,22 @@ export function FeedPage() {
     });
   }
 
-
   return (
-    <div className="home bg-neutral-content text-base-content min-h-screen w-full flex flex-col">
+    <div className="min-h-screen bg-base-100"> {/* Main container */}
+      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
+        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
 
-      <h2>Posts</h2>
-      <div role="feed" className="bg-base-100 max-w-auto mx-auto mt-10 p-6 border rounded-lg shadow-md">
-        {posts.map((post) => (
-          <Post post={post} key={post._id}/>
-        ))}
-        
+        {/* Posts Feed */}
+        <div role="feed" className="flex-1 overflow-y-auto">
+          {posts.map((post) => (
+            <Post post={post} key={post._id}/>
+          ))}
+        </div>
+                {/* Post Form */}
+        <div className="max-w-lg mx-auto w-full mb-4">
+          <PostForm onPostCreated={handlePostCreated} />
+        </div>   
       </div>
-      <div className="mx-auto">
-        <PostForm onPostCreated={handlePostCreated} />
-      </div>
-      <LogoutButton />
     </div>
   );
 }
-

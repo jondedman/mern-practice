@@ -54,7 +54,7 @@ function PostForm({onPostCreated}) {
     };
 
     return (
-    <form onSubmit={handleSubmit} className='m-4 max-width-auto mx-auto space-y-4'>
+    <form onSubmit={handleSubmit}>
         <textarea 
             type="text" 
             name="message" 
@@ -62,7 +62,7 @@ function PostForm({onPostCreated}) {
             onChange={handleChange}
             placeholder="What's on your mind?"
             rows="4"
-            className="textarea textarea-bordered rounded-xl w-[562px] "
+            className="textarea textarea-bordered rounded-xl w-full h-2"
         />
 
         {error && (
@@ -71,9 +71,9 @@ function PostForm({onPostCreated}) {
         </div>
         )}
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-2">
         <input type="submit"
-        className="btn bg-red-500 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black ..."/>
+        className="p-2 rounded-md font-bold bg-red-500 shadow-md transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-black hover:text-red-500"/>
         </div>
     </form>
     )
