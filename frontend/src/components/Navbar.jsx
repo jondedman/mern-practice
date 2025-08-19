@@ -79,15 +79,24 @@
 // export default NavBar;
 
 import { Link, useLocation } from "react-router-dom";
+import LogoutButton from "../components/LogoutButton";
 
 function NavBar() {
   const location = useLocation();
-
+  const path = location.pathname;
   return (
     <nav className="flex gap-4">
-      {location.pathname !== "/signup" && <Link to="/signup" className="btn bg-primary-content text-white">Sign Up</Link>}
-      {location.pathname !== "/login" && <Link to="/login" className="btn bg-primary-content text-white">Log In</Link>}
-      {location.pathname !== "/homepage" && <Link to="/" className="btn bg-primary-content text-white">Home</Link>}
+      {path !== "/signup" && path !== "/posts" && (
+        <Link to="/signup" className="btn bg-primary-content text-white">
+          Sign Up
+        </Link>
+      )}
+      {path !== "/login" && path !== "/posts" && (
+        <Link to="/login" className="btn bg-primary-content text-white">
+          Log In
+        </Link>
+      )}
+      {path === "/posts" && <LogoutButton />}
     </nav>
   );
 }

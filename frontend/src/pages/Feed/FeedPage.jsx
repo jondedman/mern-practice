@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
-import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
+
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
@@ -47,6 +49,7 @@ export function FeedPage() {
 
   return (
     <div className="home bg-neutral-content text-base-content min-h-screen w-full flex flex-col">
+      <Header />
 
       <h2>Posts</h2>
       <div role="feed" className="bg-base-100 max-w-auto mx-auto mt-10 p-6 border rounded-lg shadow-md">
@@ -58,7 +61,7 @@ export function FeedPage() {
       <div className="mx-auto">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
-      <LogoutButton />
+      <Footer />
     </div>
   );
 }
