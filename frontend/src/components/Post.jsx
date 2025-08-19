@@ -1,29 +1,9 @@
 import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
+import timeAgo from "../services/timeAgo";
 
 const Post = (props) => {
   console.log("props",props);
   const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
-  
-  const timeAgo = (created) =>{
-    let currentDate = new Date();
-    console.log("current date", currentDate);
-    let end = new Date(created);
-    console.log("end", end);
-    let timeDifference = currentDate - end;
-
-    // Convert milliseconds to hours and use Math.floor to avoid fractional hours
-  let minutes = Math.floor(timeDifference / (1000 * 60));
-  let hours = Math.floor(timeDifference / (1000 * 60 * 60));
-  let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    
-  if (minutes < 60) {
-    return `${minutes}m ago`;
-  } else if (hours < 24) {
-    return `${hours}h ago`;
-  } else {
-    return `${days}d ago`;
-  }
-  }
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
       {/* Post Header */}
