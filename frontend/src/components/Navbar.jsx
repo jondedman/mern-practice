@@ -64,16 +64,32 @@
 // };
 
 
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+
+// function NavBar() {
+//   return (
+//     <nav className="flex gap-4">
+//       <Link to="/signup">Sign Up</Link>
+//       <Link to="/login">Log In</Link>
+//     </nav>
+//   );
+// }
+
+
+// export default NavBar;
+
+import { Link, useLocation } from "react-router-dom";
 
 function NavBar() {
+  const location = useLocation();
+
   return (
     <nav className="flex gap-4">
-      <Link to="/signup">Sign Up</Link>
-      <Link to="/login">Log In</Link>
+      {location.pathname !== "/signup" && <Link to="/signup">Sign Up</Link>}
+      {location.pathname !== "/login" && <Link to="/login">Log In</Link>}
+      {location.pathname !== "/homepage" && <Link to="/homepage">Home</Link>}
     </nav>
   );
 }
-
 
 export default NavBar;

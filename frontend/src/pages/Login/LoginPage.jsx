@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 import { login } from "../../services/authentication";
 
@@ -36,17 +38,7 @@ export function LoginPage() {
  
   return (
     <div className="home bg-[#632c3b] text-base-content min-h-screen w-full flex flex-col">
-          
-      {/* Header */}
-      <header className="bg-neutral text-white py-4 px-6 flex justify-between items-center">
-        <h1 className="text-xl font-bold flex items-center gap-2">
-          <img src={dLogo} alt="Logo" className="w-8 h-8" />
-          dòómbook
-        </h1>
-        <nav className="flex gap-4">
-          {/* Add navigation links here if needed */}
-        </nav>
-      </header>
+      <Header />
 
       <main className="flex flex-col justify-center items-center flex-1 text-center space-y-6">
       <h2 className="text-white text-6xl font-bold">dòómbook</h2>

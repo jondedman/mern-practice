@@ -65,7 +65,7 @@ export function HomePage() {
   return (
 
     <div className="home bg-base-content text-base-content min-h-screen w-full flex flex-col">
-      <Header />
+      <Header showNav={false}/>
 
       {/* Main Content */}
       <main className="flex flex-col justify-center items-center flex-1 text-center space-y-6">
