@@ -8,19 +8,39 @@ import PostForm from "../../components/PostForm";
 import ToggleSwitch from "../../components/ToggleSwitch";
 
 export function FeedPage() {
-  const [posts, setPosts] = useState([]);
-  const [showMine, setShowMine] = useState(false);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
+  const [posts, setPosts] = useState([]);
+  const [showMine, setShowMine] = useState(false);
 
-  // Function to fetch posts from backend
-  const fetchPosts = () => {
-    getPosts(token, showMine) // <-- pass toggle state to service
+  const token = localStorage.getItem("token");
+
+  // Fetch posts whenever showMine or token changes
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const fetchPosts = () => {
+      getPosts(token, showMine)
+        .then((data) => {
+          setPosts(data.posts.reverse());
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+          navigate("/login");
+        });
+    };
+
+    fetchPosts();
+  }, [token, showMine, navigate]);
+
+  // Refetch posts after creating a new one
+  const handlePostCreated = () => {
+    if (!token) return;
+    getPosts(token, showMine)
       .then((data) => {
         setPosts(data.posts.reverse());
         localStorage.setItem("token", data.token);
@@ -29,15 +49,6 @@ export function FeedPage() {
         console.error(err);
         navigate("/login");
       });
-  };
-
-  // Fetch posts on mount and whenever toggle changes
-  useEffect(() => {
-    fetchPosts();
-  }, [showMine]); // <-- dependency triggers refetch
-
-  const handlePostCreated = () => {
-    fetchPosts(); // refetch posts after creating a new one
   };
 
   return (
