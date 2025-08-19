@@ -8,6 +8,8 @@ import CommentsModal from "../../components/CommentsModal";
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  // this is ready for when comments are fetched from the database,
+  // at which point the initial state should be an empty array
   const [comments, setComments] = useState([{id: "1", comment: "coment1"},{id: "2", comment: "comment2"},{id: "3", comment: "comment3"},{id: "4", comment: "coment4"},{id: "5", comment: "comment5"},{id: "6", comment: "comment6"}]);
 
   const handleCommentClick = (post) => {
@@ -17,7 +19,7 @@ export function FeedPage() {
   console.log(selectedPost);
   
   }
-    
+// if there is no post selected (null) modal will close
   const handleCloseModal = () => setSelectedPost(null);
   const navigate = useNavigate();
 
