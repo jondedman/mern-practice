@@ -3,22 +3,6 @@ const User = require("./models/user");
 const Post = require("./models/post");
 require("dotenv").config();
 
-// async function connectToDatabase() {
-//     const mongoDbUrl = process.env.MONGODB_URL;
-
-//     if (!mongoDbUrl) {
-//         console.error(
-//             "No MongoDB url provided. Make sure there is a MONGODB_URL environment variable set. See the README for more details."
-//         );
-//         throw new Error("No connection string provided");
-//     }
-
-//     await mongoose.connect(mongoDbUrl);
-
-//     if (process.env.NODE_ENV !== "test") {
-//         console.log("Successfully connected to MongoDB");
-//     }
-// }
 
 const postContents = [
   { message: "Just because you’re plotting world domination doesn’t mean you can’t stop to smell the roses… then genetically enhance them to spit acid.", createdAt: new Date("2025-08-01T09:00:00Z") },
@@ -44,10 +28,19 @@ const postContents = [
 async function seedPosts(users) {
   await Post.deleteMany({});
 
-  const postsWithUsers = postContents.map((postData, i) => ({
-    ...postData,
-    author: users[i % users.length]._id, // cycle through users
+  // Give each user at least one post
+  const postsWithUsers = users.map((user, i) => ({
+    ...postContents[i % postContents.length],
+    author: user._id,
   }));
+
+  // Fill the rest of the posts cycling through users
+  for (let i = users.length; i < postContents.length; i++) {
+    postsWithUsers.push({
+      ...postContents[i],
+      author: users[i % users.length]._id,
+    });
+  }
 
   const posts = await Post.insertMany(postsWithUsers);
   return posts;

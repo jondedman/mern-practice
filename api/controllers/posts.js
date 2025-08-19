@@ -2,22 +2,26 @@ const Post = require("../models/post");
 const { generateToken } = require("../lib/token");
 
 async function getAllPosts(req, res) {
-  const posts = await Post.find();
-  const token = generateToken(req.user_id);
-  res.status(200).json({ posts: posts, token: token });
+  try {
+    // Check if frontend sent ?mine=true
+    const showMine = req.query.mine === "true";
+
+    // Build query: if toggle is on, only posts by current user
+    const query = showMine ? { author: req.user_id } : {};
+
+    const posts = await Post.find(query).sort({ createdAt: -1 });
+
+    const token = generateToken(req.user_id);
+    res.status(200).json({ posts: posts, token: token });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Failed to fetch posts" });
+  }
 }
-// Previous createPost function: 
-// async function createPost(req, res) {
-//   const post = new Post(req.body);
-//   post.save();
-//   const newToken = generateToken(req.user_id);
-//   res.status(201).json({ message: "Post created", token: newToken });
-// }
 
-
-//Updated createPost function:
 async function createPost(req, res) {
   try {
+    console.log("req.user_id in createPost:", req.user_id);
     const post = new Post({
       message: req.body.message,
       author: req.user_id,   // get from middleware, not client input
@@ -33,10 +37,9 @@ async function createPost(req, res) {
   }
 }
 
-
 const PostsController = {
-  getAllPosts: getAllPosts,
-  createPost: createPost,
+  getAllPosts,
+  createPost,
 };
 
 module.exports = PostsController;

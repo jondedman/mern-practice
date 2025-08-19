@@ -2,23 +2,6 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 require("dotenv").config();
 
-// async function connectToDatabase() {
-//     const mongoDbUrl = process.env.MONGODB_URL;
-
-//     if (!mongoDbUrl) {
-//     console.error(
-//     "No MongoDB url provided. Make sure there is a MONGODB_URL environment variable set. See the README for more details."
-//     );
-//     throw new Error("No connection string provided");
-//     }
-
-//     await mongoose.connect(mongoDbUrl);
-
-//     if (process.env.NODE_ENV !== "test") {
-//     console.log(process.env.NODE_ENV)
-//     console.log("Successfully connected to MongoDB");
-//     }
-// }
 const superVillains = [
     {
     fullname: "Darth Vader",
@@ -71,8 +54,6 @@ const superVillains = [
     password: "password123"
     }
 ];
-
-
 
 async function seedUsers() {
   await User.deleteMany({});

@@ -9,34 +9,20 @@ import ToggleSwitch from "../../components/ToggleSwitch";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
-  const [filter, setFilter] = useState("all"); 
+  const [showMine, setShowMine] = useState(false);
   const navigate = useNavigate();
 
-  const currentUserId = localStorage.getItem("user_id");
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/login");
+    return;
+  }
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      getPosts(token)
-        .then((data) => {
-          setPosts(data.posts);
-          localStorage.setItem("token", data.token);
-        })
-        .catch((err) => {
-          console.error(err);
-          navigate("/login");
-        });
-    } else {
-      navigate("/login");
-    }
-  }, [navigate]);
-
-  const handlePostCreated = () => {
-    const token = localStorage.getItem("token");
-    if (!token) return navigate("/login");
-    getPosts(token)
+  // Function to fetch posts from backend
+  const fetchPosts = () => {
+    getPosts(token, showMine) // <-- pass toggle state to service
       .then((data) => {
-        setPosts(data.posts);
+        setPosts(data.posts.reverse());
         localStorage.setItem("token", data.token);
       })
       .catch((err) => {
@@ -45,28 +31,30 @@ export function FeedPage() {
       });
   };
 
-  const filteredPosts = posts.filter((post) => {
-    if (filter === "all") {
-      
-      return true;
-    } else {
-      return post.author === currentUserId || post.author?._id === currentUserId;
-    }
-  });
+  // Fetch posts on mount and whenever toggle changes
+  useEffect(() => {
+    fetchPosts();
+  }, [showMine]); // <-- dependency triggers refetch
+
+  const handlePostCreated = () => {
+    fetchPosts(); // refetch posts after creating a new one
+  };
 
   return (
     <>
       <h2>Posts</h2>
-<div className="flex justify-center my-4">
-    <ToggleSwitch
-      label={filter === "all" ? "Show My Posts" : "Show All Posts"}
-      checked={filter === "mine"}
-      onChange={() => setFilter(filter === "all" ? "mine" : "all")}
-    />
-</div>
-  
+
+      {/* Toggle for “only my posts” */}
+      <div style={{ marginBottom: "1rem" }}>
+        <ToggleSwitch
+          label="Show only my posts"
+          checked={showMine}
+          onChange={() => setShowMine((prev) => !prev)}
+        />
+      </div>
+
       <div role="feed">
-        {filteredPosts.map((post) => (
+        {posts.map((post) => (
           <Post post={post} key={post._id} />
         ))}
       </div>
