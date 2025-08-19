@@ -41,8 +41,8 @@ const Post = (props) => {
           {/* Engagement Stats */}
         <div className="card-body pt-3 pb-2">
           <div className="flex justify-between items-center text-xs text-base-content/60 pb-2 border-b border-base-300">
-              <span>👍 24 people</span>
-            <span>5 comments </span>
+              <span>👍 {Math.ceil(Math.random()*100 + 1)} people</span>
+            <span>{Math.ceil(Math.random()*100 + 1)} comments </span>
             </div>
         </div>
 
