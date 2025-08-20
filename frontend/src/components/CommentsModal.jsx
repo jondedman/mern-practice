@@ -1,7 +1,7 @@
 import Post from "./Post";
 import {useRef, useEffect} from "react";
 
-const CommentsModal = ({post, comments}) => {
+const CommentsModal = ({post, comments, onClose}) => {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const CommentsModal = ({post, comments}) => {
 return(
 <div>
 {/* have altered the default colour of the background for modal */}
-    <dialog ref={dialogRef}  className="modal bg-base-content">
+    <dialog data-testid="comments-modal" ref={dialogRef}  className="modal bg-base-content">
         <div className="modal-box">
             <Post post={post} />
       {/* Scrollable comments feed */}
@@ -28,10 +28,7 @@ return(
         ))}
             </div>
         <div className="modal-action">
-            <form method="dialog">
-        {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
-            </form>
+            <button className="btn" onClick={onClose}>Close</button>
         </div>
         </div>
     </dialog>
