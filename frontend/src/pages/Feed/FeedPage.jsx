@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import ToggleSwitch from "../../components/ToggleSwitch";
-
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -53,13 +51,12 @@ export function FeedPage() {
       });
   };
   return (
-
       <div className="home bg-neutral-content text-base-content min-h-screen w-full flex flex-col">
     <Header />
 
     {/* Main content container */}
-    <main className="flex flex-col items-center justify-center flex-grow w-full px-4">
-      <h2 className="text-2xl font-bold text-center mb-6 mt-6">Posts</h2>
+  <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}   
+    <h2 className="text-2xl font-bold text-center mb-6 mt-6">Posts</h2>
 
       {/* Toggle for “only my posts” */}
       <div className="mb-4">
@@ -71,7 +68,7 @@ export function FeedPage() {
       </div>
 
       {/* Centered feed container */}
-      <div className="flex flex-col items-center w-full" role="feed">
+      <div className="flex-1 overflow-y-auto" role="feed">
         {posts.map((post) => (
           <Post post={post} key={post._id} />
         ))}
@@ -81,7 +78,7 @@ export function FeedPage() {
       <div className="w-full max-w-3xl mt-6 mb-6">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
-    </main>
+    </div>
 
     <Footer />
   </div>
