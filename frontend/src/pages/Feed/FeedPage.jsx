@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getPosts } from "../../services/posts";
@@ -15,63 +15,54 @@ export function FeedPage() {
 
   const token = localStorage.getItem("token");
 
-  // Fetch posts whenever showMine or token changes
-  useEffect(() => {
+  // Reusable fetchPosts function
+  const fetchPosts = useCallback(async () => {
     if (!token) {
       navigate("/login");
       return;
     }
 
-    const fetchPosts = () => {
-      getPosts(token, showMine)
-        .then((data) => {
-          setPosts(data.posts.reverse());
-          localStorage.setItem("token", data.token);
-        })
-        .catch((err) => {
-          console.error(err);
-          navigate("/login");
-        });
-    };
-
-    fetchPosts();
+    try {
+      const data = await getPosts(token, showMine);
+      setPosts(data.posts.reverse());
+      localStorage.setItem("token", data.token);
+    } catch (err) {
+      console.error(err);
+      navigate("/login");
+    }
   }, [token, showMine, navigate]);
 
-  // Refetch posts after creating a new one
-  const handlePostCreated = () => {
-    if (!token) return;
-    getPosts(token, showMine)
-      .then((data) => {
-        setPosts(data.posts.reverse());
-        localStorage.setItem("token", data.token);
-      })
-      .catch((err) => {
-        console.error(err);
-        navigate("/login");
-      });
-  };
-  return (
-    <div className="min-h-screen bg-base-100"> {/* Main container */}
-      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
-        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
-      {/* Toggle for “only my posts” */}
-      <div style={{ marginBottom: "1rem" }}>
-        <ToggleSwitch
-          label="Show only my posts"
-          checked={showMine}
-          onChange={() => setShowMine((prev) => !prev)}
-        />
-      </div>
-      <div role="feed">
-        {posts.map((post) => (
-          <Post post={post} key={post._id} />
-        ))}
-      </div>
+  // Fetch posts whenever showMine or token changes
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
-      <div className="w-full max-w-5xl mx-auto">
-        <PostForm onPostCreated={handlePostCreated} />
+  return (
+    <div className="min-h-screen bg-base-100">
+      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg">
+        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
+
+        {/* Toggle for “only my posts” */}
+        <div style={{ marginBottom: "1rem" }}>
+          <ToggleSwitch
+            label="Show only my posts"
+            checked={showMine}
+            onChange={() => setShowMine((prev) => !prev)}
+          />
+        </div>
+
+        <div role="feed">
+          {posts.map((post) => (
+            <Post post={post} key={post._id} />
+          ))}
+        </div>
+
+        <div className="w-full max-w-5xl mx-auto">
+          <PostForm onPostCreated={fetchPosts} />
+        </div>
+
+        <LogoutButton />
       </div>
- </div>
- </div>
+    </div>
   );
 }
