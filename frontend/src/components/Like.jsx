@@ -12,7 +12,7 @@ const Like = () => {
     <button
       onClick={toggleLike}
       className={`btn btn-ghost btn-sm flex-1 gap-2 ${
-        hasLiked ? "border-primary border-4 text-primary" : "text-accent"
+        hasLiked ? "border-primary border-4 text-primary font-extrabold" : "text-accent"
       }`}
     >
       {hasLiked ? (
