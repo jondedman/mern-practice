@@ -177,6 +177,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../services/authentication";
 import { InputField } from "../../components/InputField";
+import UploadWidget from "../../components/UploadWidget";
 import dLogo from "../../assets/d.png";
 
 export function SignupPage() {
@@ -281,6 +282,8 @@ export function SignupPage() {
                 placeholder="Password"
                 error={passwordError}
               />
+
+              <UploadWidget />
 
               <button type="submit" className="btn bg-primary btn-wide text-white">
                 Submit
