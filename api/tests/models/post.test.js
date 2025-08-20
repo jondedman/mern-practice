@@ -37,4 +37,41 @@ describe("Post model", () => {
     expect(posts[0].message).toEqual("some message");
     expect(posts[0].author.toString()).toEqual(testUser._id.toString());
   });
+
+    it("starts with an empty 'likes' array", async () => {
+    const post = new Post({ message: "like test", author: testUser._id });
+    await post.save();
+
+    const savedPost = await Post.findById(post._id);
+    expect(Array.isArray(savedPost.likes)).toBe(true);
+    expect(savedPost.likes.length).toBe(0);
+  });
+
+  it("can add and remove a user ID in the 'likes' array", async () => {
+    const anotherUser = await new User({
+      fullname: "Another User",
+      email: "another@example.com",
+      password: "anotherpass123!"
+    }).save();
+
+    const post = new Post({ message: "like toggle", author: testUser._id });
+
+    // Add like
+    post.likes.push(anotherUser._id);
+    await post.save();
+
+    let updatedPost = await Post.findById(post._id);
+    expect(updatedPost.likes.length).toBe(1);
+    expect(updatedPost.likes[0].toString()).toBe(anotherUser._id.toString());
+
+    // Remove like
+    updatedPost.likes = updatedPost.likes.filter(
+      id => id.toString() !== anotherUser._id.toString()
+    );
+    await updatedPost.save();
+
+    const finalPost = await Post.findById(post._id);
+    expect(finalPost.likes.length).toBe(0);
+  });
+
 });
