@@ -1,38 +1,4 @@
-// import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
-// import { useState } from "react";
-
-// const Like = () => {
-
-//     const [hasLiked, setHasLiked] = useState(false);
-
-//     const toggleLike = () => {
-//         setHasLiked(!hasLiked);
-//     };
-
-//     return (
-//         <div className="flex gap-2">
-
-//             {hasLiked && (
-//                 <button onClick = {toggleLike} className="btn btn-ghost btn-sm text-primary flex-1 gap-2">
-//                     <FaThumbsUp />
-//                     Like
-//                 </button>
-//             )}
-
-//             {!hasLiked && (
-//                 <button onClick = {toggleLike} className="btn btn-ghost btn-sm text-accent flex-1 gap-2">
-//                     <FaRegThumbsUp />
-//                     Like
-//                  </button>
-//             )}
-
-//         </div>
-//     );
-// };
-
-// export default Like;
-
-import { FaThumbsUp, FaRegThumbsUp } from "react-icons/fa";
+import { FaSkullCrossbones } from "react-icons/fa";
 import { useState } from "react";
 
 const Like = () => {
@@ -45,10 +11,16 @@ const Like = () => {
   return (
     <button
       onClick={toggleLike}
-      className={`btn btn-ghost btn-sm flex-1 gap-2 ${hasLiked ? "text-primary" : "text-accent"}`}
+      className={`btn btn-ghost btn-sm flex-1 gap-2 ${
+        hasLiked ? "border-primary border-4 text-primary" : "text-accent"
+      }`}
     >
-      {hasLiked ? <FaThumbsUp data-testid = "liked" /> : <FaRegThumbsUp data-testid = "unliked" />}
-      Like
+      {hasLiked ? (
+        <FaSkullCrossbones data-testid="liked" />
+      ) : (
+        <FaSkullCrossbones data-testid="unliked" />
+      )}
+      {hasLiked ? "Acknowledged" : "Acknowledge"}
     </button>
   );
 };
