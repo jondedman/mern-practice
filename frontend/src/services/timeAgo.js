@@ -1,9 +1,7 @@
 //   consider using state to keep track of duration since post
   const timeAgo = (created) =>{
     let currentDate = new Date();
-    console.log("current date", currentDate);
     let end = new Date(created);
-    console.log("end", end);
     let timeDifference = currentDate - end;
 
 
