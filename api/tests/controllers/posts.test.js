@@ -187,4 +187,47 @@ describe("/posts", () => {
       expect(response.body.token).toEqual(undefined);
     });
   });
+
+    describe("POST /posts/:id/like", () => {
+    let post;
+
+    beforeEach(async () => {
+      post = new Post({ message: "This is a likable post", author: user._id });
+      await post.save();
+    });
+
+    test("adds the user's ID to the post's likes array", async () => {
+      const response = await request(app)
+        .post(`/posts/${post._id}/like`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.liked).toBe(true);
+      expect(response.body.likesCount).toBe(1);
+
+      const updatedPost = await Post.findById(post._id);
+      expect(updatedPost.likes.length).toBe(1);
+      expect(updatedPost.likes[0].toString()).toBe(user._id.toString());
+    });
+
+    test("removes the user's ID from the post's likes array on second toggle", async () => {
+      // Like first
+      await request(app)
+        .post(`/posts/${post._id}/like`)
+        .set("Authorization", `Bearer ${token}`);
+
+      // Then unlike
+      const response = await request(app)
+        .post(`/posts/${post._id}/like`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.liked).toBe(false);
+      expect(response.body.likesCount).toBe(0);
+
+      const updatedPost = await Post.findById(post._id);
+      expect(updatedPost.likes.length).toBe(0);
+    });
+  });
+
 });
