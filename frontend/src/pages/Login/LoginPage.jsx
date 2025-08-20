@@ -19,6 +19,8 @@ export function LoginPage() {
       const token = await login(email, password);
       localStorage.setItem("token", token);
       navigate("/posts");
+      console.log("JWT token:", token);
+
     } catch (err) {
       console.error(err);
       setError("Incorrect email or password");    
