@@ -69,9 +69,6 @@ describe("Feed Page", () => {
 });
 
 describe("Comments modal", () => {
-//   beforeAll(() => {
-//   window.HTMLDialogElement.prototype.showModal = () => {};
-// });
 beforeEach(() => {
   getPosts.mockReset();
   window.localStorage.clear();
