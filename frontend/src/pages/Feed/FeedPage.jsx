@@ -50,11 +50,10 @@ export function FeedPage() {
         navigate("/login");
       });
   };
-
   return (
-    <>
-      <h2>Posts</h2>
-
+    <div className="min-h-screen bg-base-100"> {/* Main container */}
+      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
+        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
       {/* Toggle for “only my posts” */}
       <div style={{ marginBottom: "1rem" }}>
         <ToggleSwitch
@@ -63,7 +62,6 @@ export function FeedPage() {
           onChange={() => setShowMine((prev) => !prev)}
         />
       </div>
-
       <div role="feed">
         {posts.map((post) => (
           <Post post={post} key={post._id} />
@@ -73,8 +71,7 @@ export function FeedPage() {
       <div className="w-full max-w-5xl mx-auto">
         <PostForm onPostCreated={handlePostCreated} />
       </div>
-
-      <LogoutButton />
-    </>
+ </div>
+ </div>
   );
 }
