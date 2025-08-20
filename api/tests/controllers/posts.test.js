@@ -188,3 +188,82 @@ describe("/posts", () => {
     });
   });
 });
+
+describe("GET /posts with showMine filter", () => {
+  let otherUser;
+  let otherUserToken;
+
+  beforeEach(async () => {
+    // Clear posts
+    await Post.deleteMany({});
+
+    // Create another user
+    otherUser = new User({
+      fullname: "Other User",
+      email: "other@test.com",
+      password: "password123",
+    });
+    await otherUser.save();
+
+    otherUserToken = createToken(otherUser.id);
+
+    // Create posts for both users
+    await Post.create([
+      { message: "Alice Post 1", author: user._id },
+      { message: "Alice Post 2", author: user._id },
+      { message: "Bob Post 1", author: otherUser._id },
+    ]);
+  });
+
+  test("returns only the user's posts when showMine=true", async () => {
+    const response = await request(app)
+      .get("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .query({ mine: true })
+      .expect(200);
+
+    const messages = response.body.posts.map((p) => p.message);
+    expect(messages).toEqual(expect.arrayContaining(["Alice Post 1", "Alice Post 2"]));
+    expect(messages).not.toContain("Bob Post 1");
+  });
+
+  test("returns all posts when showMine=false", async () => {
+    const response = await request(app)
+      .get("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .query({ showMine: false })
+      .expect(200);
+
+    const messages = response.body.posts.map((p) => p.message);
+    expect(messages).toEqual(expect.arrayContaining(["Alice Post 1", "Alice Post 2", "Bob Post 1"]));
+  });
+
+  test("returns empty array if user has no posts and showMine=true", async () => {
+    const newUser = new User({
+      fullname: "New User",
+      email: "newuser@test.com",
+      password: "password123",
+    });
+    await newUser.save();
+
+    const newUserToken = createToken(newUser.id);
+
+    const response = await request(app)
+      .get("/posts")
+      .set("Authorization", `Bearer ${newUserToken}`)
+      .query({ mine: true })
+      .expect(200);
+
+    expect(response.body.posts).toHaveLength(0);
+  });
+
+  test("handles invalid token when toggling filter", async () => {
+    const response = await request(app)
+      .get("/posts")
+      .set("Authorization", "Bearer invalidToken")
+      .query({ showMine: true })
+      .expect(401);
+
+    expect(response.body.posts).toBeUndefined();
+  });
+});

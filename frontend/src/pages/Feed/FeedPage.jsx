@@ -5,16 +5,25 @@ import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
+import ToggleSwitch from "../../components/ToggleSwitch";
 
 export function FeedPage() {
-  const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
+  const [posts, setPosts] = useState([]);
+  const [showMine, setShowMine] = useState(false);
+
+  const token = localStorage.getItem("token");
+
+  // Fetch posts whenever showMine or token changes
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const loggedIn = token !== null;
-    if (loggedIn) {
-      getPosts(token)
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const fetchPosts = () => {
+      getPosts(token, showMine)
         .then((data) => {
           setPosts(data.posts.reverse());
           localStorage.setItem("token", data.token);
@@ -23,43 +32,46 @@ export function FeedPage() {
           console.error(err);
           navigate("/login");
         });
-    }
-  }, [navigate]);
+    };
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
+    fetchPosts();
+  }, [token, showMine, navigate]);
 
-  const handlePostCreated = () =>{
-    getPosts(token)
-        .then((data) => {
-      setPosts(data.posts.reverse());
-      localStorage.setItem("token", data.token);
-    })
-    .catch((err) => {
-      console.error(err);
-      navigate("/login");
-    });
-  }
-
+  // Refetch posts after creating a new one
+  const handlePostCreated = () => {
+    if (!token) return;
+    getPosts(token, showMine)
+      .then((data) => {
+        setPosts(data.posts.reverse());
+        localStorage.setItem("token", data.token);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/login");
+      });
+  };
   return (
     <div className="min-h-screen bg-base-100"> {/* Main container */}
       <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
         <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
-
-        {/* Posts Feed */}
-        <div role="feed" className="flex-1 overflow-y-auto">
-          {posts.map((post) => (
-            <Post post={post} key={post._id}/>
-          ))}
-        </div>
-                {/* Post Form */}
-        <div className="max-w-lg mx-auto w-full mb-4">
-          <PostForm onPostCreated={handlePostCreated} />
-        </div>   
+      {/* Toggle for “only my posts” */}
+      <div style={{ marginBottom: "1rem" }}>
+        <ToggleSwitch
+          label="Show only my posts"
+          checked={showMine}
+          onChange={() => setShowMine((prev) => !prev)}
+        />
       </div>
-    </div>
+      <div role="feed">
+        {posts.map((post) => (
+          <Post post={post} key={post._id} />
+        ))}
+      </div>
+
+      <div className="w-full max-w-5xl mx-auto">
+        <PostForm onPostCreated={handlePostCreated} />
+      </div>
+ </div>
+ </div>
   );
 }
