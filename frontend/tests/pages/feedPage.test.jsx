@@ -39,27 +39,25 @@ describe("Feed Page", () => {
     expect(post.textContent).toEqual("Test Post 1");
   });
 
-  // repilicate logic for comments - is this test fit for purpose?
-  test("It renders posts in reverse order", async () => {
-        window.localStorage.setItem("token", "testToken");
+  // repilicate logic for comments
+test("It renders posts in backend order (newest first)", async () => {
+  window.localStorage.setItem("token", "testToken");
 
-    const mockPosts = [
-      { _id: "12345", message: "Test Post 1" },
-      { _id: "12346", message: "Test Post 2" },
-      { _id: "12347", message: "Test Post 3" }
-    ];
+  const mockPosts = [
+    { _id: "12345", message: "Test Post 1" },
+    { _id: "12346", message: "Test Post 2" },
+    { _id: "12347", message: "Test Post 3" }
+  ];
 
-    // not sure this is required for this test
-    getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
+  getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
-    render(<FeedPage />);
+  render(<FeedPage />);
 
-    const posts = await screen.findAllByRole("article");
-    expect(posts[0].textContent).toEqual("Test Post 3");
-    expect(posts[1].textContent).toEqual("Test Post 2");
-    expect(posts[2].textContent).toEqual("Test Post 1");
-
-  })
+  const posts = await screen.findAllByRole("article");
+  expect(posts[0].textContent).toEqual("Test Post 1");
+  expect(posts[1].textContent).toEqual("Test Post 2");
+  expect(posts[2].textContent).toEqual("Test Post 3");
+});
 
   test("It navigates to login if no token is present", async () => {
     render(<FeedPage />);
