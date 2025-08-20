@@ -39,7 +39,7 @@ export const FeedPage = () => {
     const fetchPosts = () => {
       getPosts(token, showMine)
         .then((data) => {
-          setPosts(data.posts.reverse());
+          setPosts(data.posts);
           localStorage.setItem("token", data.token);
         })
         .catch((err) => {
@@ -55,7 +55,7 @@ export const FeedPage = () => {
     if (!token) return;
     getPosts(token, showMine)
       .then((data) => {
-        setPosts(data.posts.reverse());
+        setPosts(data.posts);
         localStorage.setItem("token", data.token);
       })
       .catch((err) => {
