@@ -4,30 +4,40 @@ import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import CommentsModal from "../../components/CommentsModal";
+import ToggleSwitch from "../../components/ToggleSwitch";
 
-export function FeedPage() {
+export const FeedPage = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showMine, setShowMine] = useState(false);
   // this is ready for when comments are fetched from the database,
   // at which point the initial state should be an empty array
-  const [comments, setComments] = useState([{id: "1", comment: "coment1"},{id: "2", comment: "comment2"},{id: "3", comment: "comment3"},{id: "4", comment: "coment4"},{id: "5", comment: "comment5"},{id: "6", comment: "comment6"}]);
+  const [comments, setComments] = useState([
+  {id: "1", comment: "coment1"},
+  {id: "2", comment: "comment2"},
+  {id: "3", comment: "comment3"},
+  {id: "4", comment: "coment4"},
+  {id: "5", comment: "comment5"},
+  {id: "6", comment: "comment6"}
+]);
 
-  const handleCommentClick = (post) => {
-    console.log("called hcc, with post: ", post);
-    
+  const handleCommentClick = (post) => {    
   setSelectedPost(post);
-  console.log(selectedPost);
-  
   }
+
 // if there is no post selected (null) modal will close
   const handleCloseModal = () => setSelectedPost(null);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
+  // Fetch posts whenever showMine or token changes
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const loggedIn = token !== null;
-    if (loggedIn) {
-      getPosts(token)
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    const fetchPosts = () => {
+      getPosts(token, showMine)
         .then((data) => {
           setPosts(data.posts.reverse());
           localStorage.setItem("token", data.token);
@@ -36,32 +46,36 @@ export function FeedPage() {
           console.error(err);
           navigate("/login");
         });
-    }
-  }, [navigate]);
+    };
+    fetchPosts();
+  }, [token, showMine, navigate]);
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  const handlePostCreated = () =>{
-    getPosts(token)
-        .then((data) => {
-      setPosts(data.posts.reverse());
-      localStorage.setItem("token", data.token);
-    })
-    .catch((err) => {
-      console.error(err);
-      navigate("/login");
-    });
-  }
-
+  // Refetch posts after creating a new one
+  const handlePostCreated = () => {
+    if (!token) return;
+    getPosts(token, showMine)
+      .then((data) => {
+        setPosts(data.posts.reverse());
+        localStorage.setItem("token", data.token);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/login");
+      });
+  };
   return (
     <div className="min-h-screen bg-base-100"> {/* Main container */}
       <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
         <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
-
+         {/* Toggle for “only my posts” */}
+      <div style={{ marginBottom: "1rem" }}>
+        <ToggleSwitch
+          label="Show only my posts"
+          checked={showMine}
+          onChange={() => setShowMine((prev) => !prev)}
+        />
+      </div>
+        
         {/* Posts Feed */}
         <div role="feed" className="flex-1 overflow-y-auto">
           {posts.map((post) => (
@@ -80,7 +94,7 @@ export function FeedPage() {
         <div className="max-w-lg mx-auto w-full mb-4">
           <PostForm onPostCreated={handlePostCreated} />
         </div>   
-      </div>
-    </div>
+   </div>
+ </div>
   );
 }
