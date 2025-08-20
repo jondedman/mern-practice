@@ -1,4 +1,4 @@
-import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
+import { FaSkullCrossbones, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
@@ -41,8 +41,12 @@ const Post = (props) => {
           {/* Engagement Stats */}
         <div className="card-body pt-3 pb-2">
           <div className="flex justify-between items-center text-xs text-base-content/60 pb-2 border-b border-base-300">
-              <span>👍 {Math.ceil(Math.random()*100 + 1)} people</span>
-            <span>{Math.ceil(Math.random()*100 + 1)} comments </span>
+            <span className="flex items-center gap-1">
+              <FaSkullCrossbones /> {Math.ceil(Math.random()*100 + 1)} villans
+            </span>
+            <span>
+              {Math.ceil(Math.random()*100 + 1)} comments
+            </span>
             </div>
         </div>
 
