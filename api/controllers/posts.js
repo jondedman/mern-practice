@@ -33,10 +33,43 @@ async function createPost(req, res) {
   }
 }
 
+// for the like button
+async function toggleLike(req, res) {
+  try {
+    const postId = req.params.id;
+    const userId = req.user_id;
+
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const alreadyLiked = post.likes.includes(userId);
+
+    if (alreadyLiked) {
+      post.likes = post.likes.filter(id => id.toString() !== userId);
+    } else {
+      post.likes.push(userId);
+    }
+
+    await post.save();
+
+    const newToken = generateToken(userId);
+
+    res.status(200).json({ 
+      liked: !alreadyLiked, 
+      likesCount: post.likes.length,
+      token: newToken 
+    });
+  } catch (error) {
+    console.error("Error toggling like:", error);
+    res.status(500).json({ message: "Failed to toggle like" });
+  }
+}
+
 
 const PostsController = {
   getAllPosts: getAllPosts,
   createPost: createPost,
+  toggleLike: toggleLike
 };
 
 module.exports = PostsController;
