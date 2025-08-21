@@ -32,6 +32,7 @@ export async function createLike(token, post_id) {
   return res.json();
 }
 
+// is this used?
 export async function deleteLike(token, post_id) {
   const res = await fetch(`${BACKEND_URL}/likes`, {
     method: "DELETE",

@@ -85,18 +85,15 @@ import { FaSkullCrossbones, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
-const Post = (props) => {
-  const token = localStorage.getItem("token");
+const Post = ({post, onCommentClick}) => {
+    const token = localStorage.getItem("token");
   const userId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
 
   // Maintain likes state locally to update counts on like toggle without reload
-  const [likes, setLikes] = useState(props.likes);
-
-  const postLikes = likes.filter(like => like.post_id === props.post._id);
+  const [likes, setLikes] = useState([]);
+  const postLikes = likes.filter(like => like.post_id === post._id);
   const hasLiked = postLikes.some(like => like.user === userId);
   const likeCount = postLikes.length;
-
-  const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
 
   // Handler to update likes state when Like component triggers a change
   const handleLikeChange = (liked) => {
@@ -104,13 +101,14 @@ const Post = (props) => {
       // Add a new like by current user
       setLikes(prevLikes => [
         ...prevLikes,
-        { post_id: props.post._id, user: userId }
+        { post_id: post._id, user: userId }
       ]);
     } else {
       // Remove the like from current user
-      setLikes(prevLikes => prevLikes.filter(like => !(like.post_id === props.post._id && like.user === userId)));
+      setLikes(prevLikes => prevLikes.filter(like => !(like.post_id === post._id && like.user === userId)));
     }
   };
+  const randomPicUrl = `https://picsum.photos/600/400?random=${post._id}`;
 
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
@@ -119,21 +117,21 @@ const Post = (props) => {
         <div className="flex items-center gap-3">
           <div className="avatar">
             <div className="w-10 rounded-full">
-              <img
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                alt="User Avatar"
+              <img 
+                src={post.author?.profilePicture ||"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} 
+                alt="User Avatar" 
               />
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-sm">Darth Vader</h3>
-            <p className="text-xs text-base-content/60">{timeAgo(props.post.createdAt)}</p>
+            <h3 className="font-semibold text-sm">  {post.author?.fullname || "Anonymous"}</h3>
+            <p className="text-xs text-base-content/60">{timeAgo(post.createdAt)}</p>
           </div>
         </div>
 
         {/* Post Content */}
         <div className="py-3">
-          <article className="text-sm" key={props.post._id}>{props.post.message}</article>
+          <article className="text-sm" key={post._id}>{post.message}</article>
         </div>
       </div>
 
@@ -154,7 +152,7 @@ const Post = (props) => {
             <FaSkullCrossbones />
             {likeCount} villains
           </span>
-          <span>{props.post.commentsCount ?? 0} comments</span>
+          <span>{post.commentsCount ?? 0} comments</span>
         </div>
       </div>
 
@@ -162,13 +160,13 @@ const Post = (props) => {
       <div className="card-body pt-3">
         <div className="flex gap-2">
           <Like
-            postId={props.post._id}
+            postId={post._id}
             hasLiked={hasLiked}
             onLikeChange={handleLikeChange}
           />
-          <button className="btn btn-ghost btn-sm flex-1 gap-2">
+          <button onClick={() => onCommentClick(post)} className="btn btn-ghost btn-sm flex-1 gap-2">
+          Comment
             <FaCommentAlt />
-            Comment
           </button>
         </div>
       </div>

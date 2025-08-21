@@ -3,21 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
 import { getComments } from "../../services/comments";
 import { getLikes } from "../../services/likes";
-
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
+import CommentsModal from "../../components/CommentsModal";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
-export function FeedPage() {
-  const navigate = useNavigate();
-
+export const FeedPage = () => {
   const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [showMine, setShowMine] = useState(false);
 
+  const handleCommentClick = (post) => {    
+  setSelectedPost(post);
+  }
+
+// if there is no post selected (null) modal will close
+  const handleCloseModal = () => setSelectedPost(null);
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   // Fetch posts whenever showMine or token changes
@@ -26,7 +32,6 @@ export function FeedPage() {
       navigate("/login");
       return;
     }
-
     const fetchPosts = () => {
       getPosts(token, showMine)
         .then((data) => {
@@ -38,7 +43,7 @@ export function FeedPage() {
           navigate("/login");
         });
       }
-// could be refactored
+// could be refactored?
     const fetchComments = () => {
       getComments(token)
         .then((data) => {
@@ -47,7 +52,6 @@ export function FeedPage() {
         })
         .catch((err) => {
           console.error(err);
-          // navigate("/login");
         }); 
     };
 
@@ -63,12 +67,12 @@ export function FeedPage() {
       };
 
 
-    fetchPosts();
     fetchComments();
     fetchLikes();
+    fetchPosts();
   }, [token, showMine, navigate]);
 
-  console.log("comments", comments);
+
   
 
   // Refetch posts after creating a new one
@@ -76,11 +80,12 @@ export function FeedPage() {
     if (!token) return;
     getPosts(token, showMine)
       .then((data) => {
-        setPosts(data.posts.reverse());
+        setPosts(data.posts);
         localStorage.setItem("token", data.token);
       })
       .catch((err) => {
         console.error(err);
+        // why navigate login on an error?
         navigate("/login");
       });
   };
@@ -100,21 +105,27 @@ export function FeedPage() {
           onChange={() => setShowMine((prev) => !prev)}
         />
       </div>
-
-      {/* Centered feed container */}
-      <div className="flex-1 overflow-y-auto" role="feed">
-        {posts.map((post) => (
-          <Post post={post} key={post._id} likes={likes} />
-        ))}
-      </div>
-
-      {/* Post form */}
-      <div className="w-full max-w-3xl mt-6 mb-6">
-        <PostForm onPostCreated={handlePostCreated} />
-      </div>
-    </div>
-
-    <Footer />
-  </div>
+        
+        {/* Posts Feed */}
+        <div role="feed" className="flex-1 overflow-y-auto">
+          {posts.map((post) => (
+            <Post post={post} key={post._id} onCommentClick={handleCommentClick} likes={likes} />
+          ))}
+          {/* renders based on whether there is a selected post */}
+                {selectedPost && (
+        <CommentsModal
+          post={selectedPost}
+          token={token}
+          onClose={handleCloseModal}
+        />
+      )}
+        </div>
+                {/* Post Form */}
+        <div className="max-w-lg mx-auto w-full mb-4">
+          <PostForm onPostCreated={handlePostCreated} />
+        </div>   
+   </div>
+       <Footer />
+ </div>
   );
 }
