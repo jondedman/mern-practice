@@ -6,6 +6,21 @@ import { getPosts } from "../../src/services/posts";
 import { useNavigate } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
+vi.mock("../../src/components/NavBar", () => ({
+  __esModule: true,
+  default: () => <div data-testid="navbar-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Header", () => ({
+  __esModule: true,
+  default: () => <div data-testid="header-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Footer", () => ({
+  __esModule: true,
+  default: () => <div data-testid="footer-mock" />, // ADDED
+}));
+
 // Mocking the getPosts service
 vi.mock("../../src/services/posts", () => {
   const getPostsMock = vi.fn();

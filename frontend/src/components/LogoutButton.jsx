@@ -9,7 +9,7 @@ function LogoutButton() {
   }
 
   return <button 
-            className="btn bg-[#1A77F2] text-white border-[#005fd8]" 
+            className="btn bg-primary-content text-white" 
             onClick={logOut}>
               Log out
         </button>;
