@@ -57,8 +57,8 @@ return(
                 <p className="text-sm">{comment.text}</p>
           </div>
         ))}
-        <  CommentForm token={token} post_id={post._id} onCommentCreated={handleCommentCreated}  />
             </div>
+        <  CommentForm token={token} post_id={post._id} onCommentCreated={handleCommentCreated}  />
         <div className="modal-action">
             <button className="btn" onClick={onClose}>Close</button>
         </div>
