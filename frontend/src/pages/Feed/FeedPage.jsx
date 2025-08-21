@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getPosts } from "../../services/posts";
+import { getComments } from "../../services/comments";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
 import PostForm from "../../components/PostForm";
@@ -11,6 +12,7 @@ export function FeedPage() {
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]);
   const [showMine, setShowMine] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -25,17 +27,33 @@ export function FeedPage() {
     const fetchPosts = () => {
       getPosts(token, showMine)
         .then((data) => {
-          setPosts(data.posts.reverse());
+          setPosts(data.posts);
           localStorage.setItem("token", data.token);
         })
         .catch((err) => {
           console.error(err);
           navigate("/login");
         });
+      }
+// could be refactored
+    const fetchComments = () => {
+      getComments(token)
+        .then((data) => {
+          setComments(data.comments);
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+          // navigate("/login");
+        }); 
     };
 
     fetchPosts();
+    fetchComments();
   }, [token, showMine, navigate]);
+
+  console.log("comments", comments);
+  
 
   // Refetch posts after creating a new one
   const handlePostCreated = () => {

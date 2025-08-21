@@ -21,7 +21,6 @@ async function getAllPosts(req, res) {
 
 async function createPost(req, res) {
   try {
-    console.log("req.user_id in createPost:", req.user_id);
     const post = new Post({
       message: req.body.message,
       author: req.user_id,   // get from middleware, not client input
