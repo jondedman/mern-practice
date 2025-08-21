@@ -2,6 +2,7 @@ const Like = require("./models/like");
 
 const likeCount = 25; // total likes to create (adjust as needed)
 
+// i have a feeling these timestamps are created by mongoDB
 // Optional: deterministic timestamp range
 const baseDate = new Date("2025-08-01T09:00:00Z");
 
