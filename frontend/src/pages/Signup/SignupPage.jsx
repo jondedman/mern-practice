@@ -189,6 +189,8 @@ export function SignupPage() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -222,7 +224,7 @@ export function SignupPage() {
     if (!validate()) return;
 
     try {
-      await signup(fullname, email, password);
+      await signup(fullname, email, password, imageUrl);
       navigate("/login");
     } catch (err) {
       console.error(err);
@@ -283,7 +285,13 @@ export function SignupPage() {
                 error={passwordError}
               />
 
-              <UploadWidget />
+              <UploadWidget setImageUrl={setImageUrl} />
+              {imageUrl && (
+  <div className="mb-4">
+    <img src={imageUrl} alt="Profile preview" className="w-24 h-24 rounded-full object-cover" />
+  </div>
+)}
+
 
               <button type="submit" className="btn bg-primary btn-wide text-white">
                 Submit
