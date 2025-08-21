@@ -58,23 +58,14 @@
 
 import { Link } from "react-router-dom";
 import "./HomePage.css";
-import dLogo from "../../assets/d.png"; // import the image
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export function HomePage() {
   return (
 
     <div className="home bg-base-content text-base-content min-h-screen w-full flex flex-col">
-      
-      {/* Header */}
-      <header className="bg-neutral text-white py-4 px-6 flex justify-between items-center">
-        <h1 className="text-xl font-bold flex items-center gap-2">
-          <img src={dLogo} alt="Logo" className="w-8 h-8" />
-          dòómbook
-        </h1>
-        <nav className="flex gap-4">
-          {/* Add navigation links here if needed */}
-        </nav>
-      </header>
+      <Header showNav={false}/>
 
       {/* Main Content */}
       <main className="flex flex-col justify-center items-center flex-1 text-center space-y-6">
@@ -91,10 +82,7 @@ export function HomePage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-neutral text-white py-4 text-center">
-        <p>MERN {"'n'"} BURN {new Date().getFullYear()} © All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

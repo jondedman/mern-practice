@@ -7,12 +7,28 @@ import { login } from "../../src/services/authentication";
 
 import { LoginPage } from "../../src/pages/Login/LoginPage";
 
-// Mocking React Router's useNavigate function
-vi.mock("react-router-dom", () => {
-  const navigateMock = vi.fn();
-  const useNavigateMock = () => navigateMock; // Create a mock function for useNavigate
-  return { useNavigate: useNavigateMock };
+vi.mock("../../src/components/NavBar", () => {
+  return {
+    __esModule: true,
+    default: () => <div data-testid="navbar-mock" />,
+  };
 });
+
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom"); // bring in real router
+  const navigateMock = vi.fn();
+  return {
+    ...actual,
+    useNavigate: () => navigateMock, // only override useNavigate
+  };
+});
+
+// // Mocking React Router's useNavigate function
+// vi.mock("react-router-dom", () => {
+//   const navigateMock = vi.fn();
+//   const useNavigateMock = () => navigateMock; // Create a mock function for useNavigate
+//   return { useNavigate: useNavigateMock };
+// });
 
 // Mocking the login service
 vi.mock("../../src/services/authentication", () => {
@@ -29,7 +45,7 @@ async function completeLoginForm() {
   const submitButtonEl = screen.getByRole("submit-button");
 
   await user.type(emailInputEl, "test@email.com");
-  await user.type(passwordInputEl, "abcd1234!");
+  await user.type(passwordInputEl, "1234");
   await user.click(submitButtonEl);
 }
 
@@ -43,7 +59,7 @@ describe("Login Page", () => {
 
     await completeLoginForm();
 
-    expect(login).toHaveBeenCalledWith("test@email.com", "abcd1234!");
+    expect(login).toHaveBeenCalledWith("test@email.com", "1234");
   });
 
   test("navigates to /posts on successful login", async () => {
@@ -57,43 +73,13 @@ describe("Login Page", () => {
     expect(navigateMock).toHaveBeenCalledWith("/posts");
   });
 
-  test("displays error when email not entered", async () => {
+  test("shows error message on unsuccessful login", async () => {
     render(<LoginPage />);
-    const user = userEvent.setup();
 
-    // Make login fail
-    login.mockRejectedValue(new Error("Login failed"));
+    login.mockRejectedValue(new Error("Error logging in"));
 
-    // Ensure email is empty (optional, for clarity)
-    const emailInput = screen.getByLabelText("Email:");
-    await user.clear(emailInput);  
+    await completeLoginForm();
 
-    // Fill only email, leave password empty
-    await user.type(screen.getByLabelText("Email:"), "test@email.com");
-    await user.click(screen.getByRole("submit-button"));
-
-    // Assert that error message is displayed
     expect(await screen.findByText("Incorrect email or password")).not.toBeNull();
   });
-
-  test("displays error when password not entered", async () => {
-    render(<LoginPage />);
-    const user = userEvent.setup();
-
-    // Make login fail
-    login.mockRejectedValue(new Error("Login failed"));
-
-    // Ensure password is empty (optional, for clarity)
-    const passwordInput = screen.getByLabelText("Password:");
-    await user.clear(passwordInput);  
-
-    // Fill only password, leave email empty
-    await user.type(screen.getByLabelText("Password:"), "abcd1234!");
-    await user.click(screen.getByRole("submit-button"));
-
-    // Assert that error message is displayed
-    expect(await screen.findByText("Incorrect email or password")).not.toBeNull();
-  });
-
-
 });

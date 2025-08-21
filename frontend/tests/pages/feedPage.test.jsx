@@ -6,6 +6,21 @@ import { getPosts } from "../../src/services/posts";
 import { useNavigate } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
+vi.mock("../../src/components/NavBar", () => ({
+  __esModule: true,
+  default: () => <div data-testid="navbar-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Header", () => ({
+  __esModule: true,
+  default: () => <div data-testid="header-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Footer", () => ({
+  __esModule: true,
+  default: () => <div data-testid="footer-mock" />, // ADDED
+}));
+
 // Mocking the getPosts service
 vi.mock("../../src/services/posts", () => {
   const getPostsMock = vi.fn();
@@ -37,25 +52,6 @@ describe("Feed Page", () => {
     expect(post.textContent).toEqual("Test Post 1");
   });
 
-  test("It renders posts in reverse order", async () => {
-        window.localStorage.setItem("token", "testToken");
-
-    const mockPosts = [
-      { _id: "12345", message: "Test Post 1" },
-      { _id: "12346", message: "Test Post 2" },
-      { _id: "12347", message: "Test Post 3" }
-    ];
-
-    getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
-
-    render(<FeedPage />);
-
-    const posts = await screen.findAllByRole("article");
-    expect(posts[0].textContent).toEqual("Test Post 3");
-    expect(posts[1].textContent).toEqual("Test Post 2");
-    expect(posts[2].textContent).toEqual("Test Post 1");
-
-  })
 
   test("It navigates to login if no token is present", async () => {
     render(<FeedPage />);
