@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CommentForm({post_id, token}) {
+function CommentForm({post_id, token, onCommentCreated}) {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
 
@@ -32,6 +32,7 @@ try {
   if (response.ok) {
     setText("");
     setError("");
+    onCommentCreated()
   } else {
     setError("Failed to create comment.");
   }

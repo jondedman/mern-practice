@@ -1,4 +1,4 @@
-import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
+import { FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 

@@ -30,6 +30,19 @@ const CommentsModal = ({post, onClose, token}) => {
   if (!post) return null;
 console.log("post", post);
 
+  // Refetch comments after creating a new one
+  const handleCommentCreated = () => {
+    if (!token) return;
+    getComments(token, post._id)
+      .then((data) => {
+        setComments(data.comments);
+        localStorage.setItem("token", data.token);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
 return(
 <div>
 {/* have altered the default colour of the background for modal */}
@@ -44,7 +57,7 @@ return(
                 <p className="text-sm">{comment.text}</p>
           </div>
         ))}
-        <  CommentForm token={token} post_id={post._id} />
+        <  CommentForm token={token} post_id={post._id} onCommentCreated={handleCommentCreated}  />
             </div>
         <div className="modal-action">
             <button className="btn" onClick={onClose}>Close</button>
