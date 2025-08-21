@@ -38,3 +38,5 @@ describe("Post model", () => {
     expect(posts[0].author.toString()).toEqual(testUser._id.toString());
   });
 });
+
+// perhaps we should test that a post has an author?

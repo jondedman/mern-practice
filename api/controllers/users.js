@@ -4,8 +4,9 @@ function create(req, res) {
   const fullname = req.body.fullname;
   const email = req.body.email;
   const password = req.body.password;
+  const profilePicture = req.body.profilePicture;
 
-  const user = new User({ fullname, email, password });
+  const user = new User({ fullname, email, password, profilePicture });
   user
     .save()
     .then((user) => {

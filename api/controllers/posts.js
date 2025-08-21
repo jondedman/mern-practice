@@ -9,7 +9,9 @@ async function getAllPosts(req, res) {
     // Build query: if toggle is on, only posts by current user
     const query = showMine ? { author: req.user_id } : {};
 
-    const posts = await Post.find(query).sort({ createdAt: -1 });
+    const posts = await Post.find(query)
+      .sort({ createdAt: -1 })
+      .populate("author", "fullname profilePicture") // Populate author details;
 
     const token = generateToken(req.user_id);
     res.status(200).json({ posts: posts, token: token });
@@ -21,7 +23,6 @@ async function getAllPosts(req, res) {
 
 async function createPost(req, res) {
   try {
-    console.log("req.user_id in createPost:", req.user_id);
     const post = new Post({
       message: req.body.message,
       author: req.user_id,   // get from middleware, not client input
