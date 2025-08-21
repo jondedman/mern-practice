@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
-import { getComments } from "../../services/comments";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import CommentsModal from "../../components/CommentsModal";
@@ -12,7 +11,6 @@ import Footer from "../../components/Footer";
 export const FeedPage = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
-  const [comments, setComments] = useState([]);
   const [showMine, setShowMine] = useState(false);
 
   const handleCommentClick = (post) => {    
@@ -44,7 +42,6 @@ export const FeedPage = () => {
     fetchPosts();
   }, [token, showMine, navigate]);
 
-  console.log("comments", comments);
   
 
   // Refetch posts after creating a new one

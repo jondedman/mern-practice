@@ -25,10 +25,7 @@ const CommentsModal = ({post, onClose, token}) => {
         fetchComments();
         }
     
-    }, [post, token]);
-
-    // console.log("comments:", comments);
-    
+    }, [post, token]);    
   if (!post) return null;
 
 return(
