@@ -2,8 +2,8 @@ import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
-const Post = (props) => {
-  const randomPicUrl = `https://picsum.photos/600/400?random=${props.post._id}`;
+const Post = ({post, onCommentClick}) => {
+  const randomPicUrl = `https://picsum.photos/600/400?random=${post._id}`;
   return (
     <div className="card bg-base-100 w-full max-w-lg shadow-md mb-4">
       {/* Post Header */}
@@ -25,7 +25,7 @@ const Post = (props) => {
 
         {/* Post Content */}
         <div className="py-3">
-          <article className="text-sm" key={props.post._id}>{props.post.message}</article>
+          <article className="text-sm" key={post._id}>{post.message}</article>
         </div>
       </div>
 
@@ -50,9 +50,9 @@ const Post = (props) => {
       <div className="card-body pt-3">
         <div className="flex gap-2">
           <Like />
-          <button className="btn btn-ghost btn-sm flex-1 gap-2">
+          <button onClick={() => onCommentClick(post)} className="btn btn-ghost btn-sm flex-1 gap-2">
+          Comment
             <FaCommentAlt />
-            Comment
           </button>
         </div>
       </div>

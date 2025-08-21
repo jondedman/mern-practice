@@ -1,10 +1,9 @@
-import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
-
+import { render, screen, within } from "@testing-library/react";
+import { test, vi } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { FeedPage } from "../../src/pages/Feed/FeedPage";
 import { getPosts } from "../../src/services/posts";
 import { useNavigate } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
 
 vi.mock("../../src/components/NavBar", () => ({
   __esModule: true,
@@ -27,6 +26,8 @@ vi.mock("../../src/services/posts", () => {
   return { getPosts: getPostsMock };
 });
 
+// put a mock of getComments service here
+
 // Mocking React Router's useNavigate function
 vi.mock("react-router-dom", () => {
   const navigateMock = vi.fn();
@@ -39,6 +40,7 @@ describe("Feed Page", () => {
     window.localStorage.removeItem("token");
   });
 
+  // replicate test logic for other backend requests
   test("It displays posts from the backend", async () => {
     window.localStorage.setItem("token", "testToken");
 
@@ -52,6 +54,25 @@ describe("Feed Page", () => {
     expect(post.textContent).toEqual("Test Post 1");
   });
 
+  // repilicate logic for comments
+test("It renders posts in backend order (newest first)", async () => {
+  window.localStorage.setItem("token", "testToken");
+
+  const mockPosts = [
+    { _id: "12345", message: "Test Post 1" },
+    { _id: "12346", message: "Test Post 2" },
+    { _id: "12347", message: "Test Post 3" }
+  ];
+
+  getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
+
+  render(<FeedPage />);
+
+  const posts = await screen.findAllByRole("article");
+  expect(posts[0].textContent).toEqual("Test Post 1");
+  expect(posts[1].textContent).toEqual("Test Post 2");
+  expect(posts[2].textContent).toEqual("Test Post 3");
+});
 
   test("It navigates to login if no token is present", async () => {
     render(<FeedPage />);
@@ -60,6 +81,87 @@ describe("Feed Page", () => {
   });
 });
 
+describe("Comments modal", () => {
+beforeEach(() => {
+  getPosts.mockReset();
+  window.localStorage.clear();
+  // mocked to avoid jsdom errors
+  window.HTMLDialogElement.prototype.showModal = () => {};
+});
+
+test("comments modal is not present initially", () => {
+  render(<FeedPage />);
+  expect(screen.queryByTestId("comments-modal")).to.not.exist;
+});
+
+  test("comments modal opens after clicking comment button", async () => {
+    // Arrange: set up mock posts and token
+    window.localStorage.setItem("token", "testToken");
+    const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+    getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
+
+    render(<FeedPage />);
+
+    // Act: find and click the comment button
+    const commentButton = await screen.findByRole("button", { name: /comment/i });
+    await userEvent.click(commentButton);
+
+    // Assert: modal should now be present
+    expect(screen.getByTestId("comments-modal")).to.exist;
+  });
+
+  test("comments modal contains correct post and comments after opening", async () => {
+  window.localStorage.setItem("token", "testToken");
+  const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+  getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
+
+  render(<FeedPage />);
+  const commentButton = await screen.findByRole("button", { name: /comment/i });
+  await userEvent.click(commentButton);
+
+  const modal = screen.getByTestId("comments-modal");
+  expect(modal).to.exist;
+  // Modal should contain the post message
+  expect(within(modal).getByText("Test Post 1")).to.exist;
+  // Modal should be present
+
+  // Modal should contain comments
+  expect(within(modal).getAllByText(/comment/i)).to.exist;
+  // expect(screen.getByText(/comment/i)).to.exist;
+});
+
+test("comments modal closes after clicking close button", async () => {
+  window.localStorage.setItem("token", "testToken");
+  const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+  getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
+
+  render(<FeedPage />);
+  const commentButton = await screen.findByRole("button", { name: /comment/i });
+  await userEvent.click(commentButton);
+    const modal = screen.getByTestId("comments-modal");
+  // Modal should be present
+  expect(modal).to.exist;
+
+  // Find and click the close button
+const closeButton = within(modal).getByText(/close/i);
+await userEvent.click(closeButton);
+
+  // Modal should be closed
+  expect(screen.queryByTestId("comments-modal")).to.not.exist;
+});
+
+test("comments modal does not open if there are no posts", async () => {
+  window.localStorage.setItem("token", "testToken");
+  getPosts.mockResolvedValue({ posts: [], token: "newToken" });
+
+  render(<FeedPage />);
+  // There should be no comment button
+  expect(screen.queryByRole("button", { name: /comment/i })).to.not.exist;
+  // Modal should not be present
+  expect(screen.queryByTestId("comments-modal")).to.not.exist;
+});
+
+  })
 describe("FeedPage toggle behaviour", () => {
   // test that toggling the switch fetches only the user's posts
 test("Toggle fetches only my posts and then all posts when toggled back", async () => {
