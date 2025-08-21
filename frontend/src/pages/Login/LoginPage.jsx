@@ -16,8 +16,9 @@ export function LoginPage() {
     setError(""); 
 
     try {
-      const token = await login(email, password);
+      const { token, user } = await login(email, password);
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/posts");
       console.log("JWT token:", token);
 
