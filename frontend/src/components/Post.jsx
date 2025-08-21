@@ -1,5 +1,6 @@
 import { FaThumbsUp, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
+import Like from "./Like";
 
 const Post = ({post, onCommentClick}) => {
   const randomPicUrl = `https://picsum.photos/600/400?random=${post._id}`;
@@ -48,13 +49,10 @@ const Post = ({post, onCommentClick}) => {
       {/* Action Buttons */}
       <div className="card-body pt-3">
         <div className="flex gap-2">
-          <button className="btn btn-ghost btn-sm flex-1 gap-2">
-            <FaThumbsUp />
-            Like
-          </button>
+          <Like />
           <button onClick={() => onCommentClick(post)} className="btn btn-ghost btn-sm flex-1 gap-2">
+          Comment
             <FaCommentAlt />
-            Comment
           </button>
         </div>
       </div>
@@ -63,3 +61,4 @@ const Post = ({post, onCommentClick}) => {
 }
 
 export default Post;
+

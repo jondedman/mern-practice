@@ -7,6 +7,21 @@ import { signup } from "../../src/services/authentication";
 
 import { SignupPage } from "../../src/pages/Signup/SignupPage";
 
+vi.mock("../../src/components/NavBar", () => ({
+  __esModule: true,
+  default: () => <div data-testid="navbar-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Header", () => ({
+  __esModule: true,
+  default: () => <div data-testid="header-mock" />, // ADDED
+}));
+
+vi.mock("../../src/components/Footer", () => ({
+  __esModule: true,
+  default: () => <div data-testid="footer-mock" />, // ADDED
+}));
+
 // Mocking React Router's useNavigate function
 vi.mock("react-router-dom", () => {
   const navigateMock = vi.fn();

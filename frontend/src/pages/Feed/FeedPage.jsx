@@ -1,25 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
+import { getComments } from "../../services/comments";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import CommentsModal from "../../components/CommentsModal";
 import ToggleSwitch from "../../components/ToggleSwitch";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export const FeedPage = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [comments, setComments] = useState([]);
   const [showMine, setShowMine] = useState(false);
-  // this is ready for when comments are fetched from the database,
-  // at which point the initial state should be an empty array
-  const [comments, setComments] = useState([
-  {id: "1", comment: "coment1"},
-  {id: "2", comment: "comment2"},
-  {id: "3", comment: "comment3"},
-  {id: "4", comment: "coment4"},
-  {id: "5", comment: "comment5"},
-  {id: "6", comment: "comment6"}
-]);
 
   const handleCommentClick = (post) => {    
   setSelectedPost(post);
@@ -46,9 +40,25 @@ export const FeedPage = () => {
           console.error(err);
           navigate("/login");
         });
+      }
+// could be refactored
+    const fetchComments = () => {
+      getComments(token)
+        .then((data) => {
+          setComments(data.comments);
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+          // navigate("/login");
+        }); 
     };
     fetchPosts();
+    fetchComments();
   }, [token, showMine, navigate]);
+
+  console.log("comments", comments);
+  
 
   // Refetch posts after creating a new one
   const handlePostCreated = () => {
@@ -64,11 +74,15 @@ export const FeedPage = () => {
       });
   };
   return (
-    <div className="min-h-screen bg-base-100"> {/* Main container */}
-      <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}       
-        <h2 className="text-2xl font-bold text-center mb-4">Posts</h2>
-         {/* Toggle for “only my posts” */}
-      <div style={{ marginBottom: "1rem" }}>
+      <div className="home bg-neutral-content text-base-content min-h-screen w-full flex flex-col">
+    <Header />
+
+    {/* Main content container */}
+  <div className="container mx-auto px-4 py-8 h-screen flex flex-col max-w-lg"> {/* Content container */}   
+    <h2 className="text-2xl font-bold text-center mb-6 mt-6">Posts</h2>
+
+      {/* Toggle for “only my posts” */}
+      <div className="mb-4">
         <ToggleSwitch
           label="Show only my posts"
           checked={showMine}
@@ -95,6 +109,7 @@ export const FeedPage = () => {
           <PostForm onPostCreated={handlePostCreated} />
         </div>   
    </div>
+       <Footer />
  </div>
   );
 }
