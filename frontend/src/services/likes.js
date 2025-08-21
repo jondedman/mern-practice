@@ -14,6 +14,8 @@ export async function getLikes(token) {
 }
 
 export async function createLike(token, post_id) {
+  console.log("Sending token:", token); 
+
   const res = await fetch(`${BACKEND_URL}/likes`, {
     method: "POST",
     headers: {
@@ -24,6 +26,8 @@ export async function createLike(token, post_id) {
   });
 
   if (!res.ok) throw new Error("Failed to like post");
+
+  console.log("Sending POST to /likes with:", { post_id });
 
   return res.json();
 }
@@ -42,3 +46,4 @@ export async function deleteLike(token, post_id) {
 
   return res.json();
 }
+
