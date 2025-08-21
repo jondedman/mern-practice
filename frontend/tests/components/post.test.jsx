@@ -17,7 +17,7 @@ describe("Post", () => {
   const buttons = screen.getAllByRole("button");
   // Assert
   expect(buttons.length).toBe(2);
-  expect(buttons[0].textContent).toBe("Like");
+  expect(buttons[0].textContent).toBe("Acknowledge");
   expect(buttons[1].textContent).toBe("Comment");
 });
   test("renders with an image", () => {
