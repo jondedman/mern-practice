@@ -4,6 +4,7 @@ require("dotenv").config();
 const seedUsers = require("./seed.users");
 const seedPosts = require("./seed.posts");
 const seedComments = require("./seed.comments");
+const seedLikes = require("./seed.likes");
 
 async function main() {
     const mongoUrl = process.env.MONGODB_URL;
@@ -35,6 +36,9 @@ async function main() {
 
     const comments = await seedComments(users, posts);
     console.log(`${comments.length} comments created`);
+
+    const likes = await seedLikes(users, posts);
+    console.log(`${likes.length} likes created`);
 
     // Disconnect safely
     await mongoose.disconnect();
