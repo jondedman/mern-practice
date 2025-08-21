@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
 import { getComments } from "../../services/comments";
+import { getLikes } from "../../services/likes";
+
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import ToggleSwitch from "../../components/ToggleSwitch";
@@ -13,6 +15,7 @@ export function FeedPage() {
 
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [showMine, setShowMine] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -48,8 +51,21 @@ export function FeedPage() {
         }); 
     };
 
+    const fetchLikes = () => {
+      getLikes(token)
+        .then((data) => {
+          setLikes(data.likes);
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      };
+
+
     fetchPosts();
     fetchComments();
+    fetchLikes();
   }, [token, showMine, navigate]);
 
   console.log("comments", comments);
@@ -88,7 +104,7 @@ export function FeedPage() {
       {/* Centered feed container */}
       <div className="flex-1 overflow-y-auto" role="feed">
         {posts.map((post) => (
-          <Post post={post} key={post._id} />
+          <Post post={post} key={post._id} likes={likes} />
         ))}
       </div>
 
