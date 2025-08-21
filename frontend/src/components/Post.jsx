@@ -12,14 +12,14 @@ const Post = ({post, onCommentClick}) => {
           <div className="avatar">
             <div className="w-10 rounded-full">
               <img 
-                src={props.post.author?.profilePicture ||"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} 
+                src={post.author?.profilePicture ||"https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} 
                 alt="User Avatar" 
               />
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-sm">  {props.post.author?.fullname || "Anonymous"}</h3>
-            <p className="text-xs text-base-content/60">{timeAgo(props.post.createdAt)}</p>
+            <h3 className="font-semibold text-sm">  {post.author?.fullname || "Anonymous"}</h3>
+            <p className="text-xs text-base-content/60">{timeAgo(post.createdAt)}</p>
           </div>
         </div>
 

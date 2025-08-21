@@ -86,6 +86,8 @@ function NavBar() {
   const path = location.pathname;
 
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log("user", user.avatar);
+  
 
   return (
     <nav className="flex gap-4 items-center">
