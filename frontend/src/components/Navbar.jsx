@@ -84,19 +84,35 @@ import LogoutButton from "../components/LogoutButton";
 function NavBar() {
   const location = useLocation();
   const path = location.pathname;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
-    <nav className="flex gap-4">
-      {path !== "/signup" && path !== "/posts" && (
-        <Link to="/signup" className="btn bg-primary-content text-white">
-          Sign Up
-        </Link>
+    <nav className="flex gap-4 items-center">
+      {user ? (
+        <>
+          <img
+            src={user.avatar}
+            // alt={user.fullname}
+            className="w-8 h-8 rounded-full"
+          />
+          <span className="text-white">{user.fullname}</span>
+          {path === "/posts" && <LogoutButton />}
+        </>
+      ) : (
+        <>
+          {path !== "/signup" && path !== "/posts" && (
+            <Link to="/signup" className="btn bg-primary-content text-white">
+              Sign Up
+            </Link>
+          )}
+          {path !== "/login" && path !== "/posts" && (
+            <Link to="/login" className="btn bg-primary-content text-white">
+              Log In
+            </Link>
+          )}
+        </>
       )}
-      {path !== "/login" && path !== "/posts" && (
-        <Link to="/login" className="btn bg-primary-content text-white">
-          Log In
-        </Link>
-      )}
-      {path === "/posts" && <LogoutButton />}
     </nav>
   );
 }
