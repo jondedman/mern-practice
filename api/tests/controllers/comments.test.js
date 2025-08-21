@@ -42,7 +42,11 @@ describe("/comments", () => {
     await post.save();
     token = createToken(user.id);
   });
-
+  afterEach(async () => {
+  await Comment.deleteMany({});
+  await Post.deleteMany({});
+  await User.deleteMany({});
+});
   describe("POST, when a valid token is present", () => {
     test("responds with a 201", async () => {
       const response = await request(app)
@@ -120,23 +124,34 @@ describe("/comments", () => {
       expect(response.status).toEqual(200);
     });
 
-    test("returns every comment in the collection", async () => {
-      const comment1 = new Comment({ text: "howdy!", author: user._id, post_id: post._id });
-      const comment2 = new Comment({ text: "hola!", author: user._id, post_id: post._id });
-      await comment1.save();
-      await comment2.save();
+test("returns only comments for the specified post", async () => {
+    // Create two posts
+    const postA = new Post({ message: "Post A", author: user._id });
+    const postB = new Post({ message: "Post B", author: user._id });
+    await postA.save();
+    await postB.save();
 
-      const response = await request(app)
-        .get("/comments")
-        .set("Authorization", `Bearer ${token}`);
+    // Create comments for both posts
+    const commentA1 = new Comment({ text: "Comment for A1", author: user._id, post_id: postA._id });
+    const commentA2 = new Comment({ text: "Comment for A2", author: user._id, post_id: postA._id });
+    const commentB1 = new Comment({ text: "Comment for B1", author: user._id, post_id: postB._id });
+    await commentA1.save();
+    await commentA2.save();
+    await commentB1.save();
 
-      const comments = response.body.comments;
-      const firstComment = comments[0];
-      const secondComment = comments[1];
+    // Fetch comments for postA only
+    const response = await request(app)
+      .get(`/comments?post_id=${postA._id}`)
+      .set("Authorization", `Bearer ${token}`);
 
-      expect(firstComment.text).toEqual("howdy!");
-      expect(secondComment.text).toEqual("hola!");
-    });
+    expect(response.status).toEqual(200);
+    expect(response.body.comments.length).toEqual(2);
+    expect(response.body.comments[0].post_id).toEqual(postA._id.toString());
+    expect(response.body.comments[1].post_id).toEqual(postA._id.toString());
+    // Should not include comments for postB
+    const postIds = response.body.comments.map(c => c.post_id);
+    expect(postIds).not.toContain(postB._id.toString());
+  });
 
     test("returns a new token", async () => {
       const comment1 = new Comment({ text: "First comment!", author: user._id, post_id: post._id });

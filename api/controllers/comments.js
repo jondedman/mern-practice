@@ -3,7 +3,9 @@ const { generateToken } = require("../lib/token");
 
 async function getAllComments(req, res) {
   try {
-    const comments = await Comment.find({}).sort({ createdAt: -1 });
+    const { post_id } = req.query;
+    const query = post_id ? { post_id } : {};
+    const comments = await Comment.find(query).sort({ createdAt: -1 });
 
     const token = generateToken(req.user_id);
     res.status(200).json({ comments: comments, token: token });
