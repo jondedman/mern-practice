@@ -7,61 +7,71 @@ const superVillains = [
     fullname: "Darth Vader",
     email: "darth@deathstar.com",
     password: "password123",
-    avatar: "/DarthVader.jpeg"
+    avatar: "/DarthVader.jpeg",
+    profilePicture: "/DarthVader.jpeg"
     },
     {
     fullname: "Thanos Titan",
     email: "thanos@infinitygauntlet.org",
     password: "password123",
-    avatar: "/ThanosAvatar.jpeg"
+    avatar: "/ThanosAvatar.jpeg",
+    profilePicture: "/ThanosAvatar.jpeg"
     },
     {
     fullname: "Lex Luthor",
     email: "lex@luthorcorp.com",
     password: "password123",
-    avatar: "/LexLuthor.jpeg"
+    avatar: "/LexLuthor.jpeg",
+    profilePicture: "/LexLuthor.jpeg"
     },
     {
     fullname: "Harley Quinn",
     email: "harley@arkham.org",
     password: "password123",
-    avatar: "/harley-quinn.jpeg"
+    avatar: "/harley-quinn.jpeg",
+    profilePicture: "/harley-quinn.jpeg"
     },
     {
     fullname: "Green Goblin",
     email: "norman@oscorp.com",
     password: "password123",
-    avatar: "/GreenGoblin.jpeg"
+    avatar: "/GreenGoblin.jpeg",
+    profilePicture: "/GreenGoblin.jpeg"
     },
     {
     fullname: "Magneto Erik",
     email: "magneto@genosha.mutants",
     password: "password123",
-    avatar: "/MagnetoErik.jpeg"
+    avatar: "/MagnetoErik.jpeg",
+    profilePicture: "/MagnetoErik.jpeg"
     },
     {
     fullname: "Doctor Doom",
     email: "doom@latveria.gov",
     password: "password123",
-    avatar: "/DrDoom.jpeg"
+    avatar: "/DrDoom.jpeg",
+    profilePicture: "/DrDoom.jpeg"
     },
     {
     fullname: "The Joker",
     email: "joker@arkhamasylum.net",
     password: "password123",
-    avatar: "/joker.jpeg"
+    avatar: "/joker.jpeg",
+    profilePicture: "/joker.jpeg"
     },
     {
     fullname: "Hela Odinsdottir",
     email: "hela@helheim.asgard",
     password: "password123",
-    avatar: "/HelaOdinsdottir.jpeg"
+    avatar: "/HelaOdinsdottir.jpeg",
+    profilePicture: "/HelaOdinsdottir.jpeg"
     },
     {
     fullname: "Voldemort Riddle",
     email: "tom@darkarts.uk",
     password: "password123",
-    avatar: "/Voldemort.jpeg"
+    avatar: "/Voldemort.jpeg",
+    profilePicture: "/Voldemort.jpeg"
     }
 ];
 
