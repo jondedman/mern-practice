@@ -17,8 +17,11 @@ async function getAllLikes(req, res) {
 
 async function createLike(req, res) {
   try {
+    console.log("User ID from token:", req.user_id);
+    console.log("Post ID from body:", req.body.post_id);
+
     const like = new Like({
-      user: req.user_id,   // correct field name
+      user: req.user_id,
       post_id: req.body.post_id
     });
     await like.save();
@@ -26,9 +29,10 @@ async function createLike(req, res) {
     const newToken = generateToken(req.user_id);
     res.status(201).json({ message: "Like created", token: newToken });
   } catch (error) {
-    console.error("Error creating like:", error);
-    res.status(400).json({ message: "Failed to create like" });
-  }
+  console.error("Error creating like:", error);  // <-- full error
+  res.status(400).json({ message: "Failed to create like", error: error.message });
+}
+
 }
 
 async function deleteLike(req, res) {
