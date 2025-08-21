@@ -1,6 +1,7 @@
 import Post from "./Post";
 import {useRef, useEffect, useState} from "react";
 import { getComments } from "../services/comments";
+import CommentForm from "./CommentForm";
 
 const CommentsModal = ({post, onClose, token}) => {
   const [comments, setComments] = useState([]);
@@ -27,6 +28,7 @@ const CommentsModal = ({post, onClose, token}) => {
     
     }, [post, token]);    
   if (!post) return null;
+console.log("post", post);
 
 return(
 <div>
@@ -42,6 +44,7 @@ return(
                 <p className="text-sm">{comment.text}</p>
           </div>
         ))}
+        <  CommentForm token={token} post_id={post._id} />
             </div>
         <div className="modal-action">
             <button className="btn" onClick={onClose}>Close</button>
