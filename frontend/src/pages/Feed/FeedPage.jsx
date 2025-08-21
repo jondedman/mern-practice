@@ -41,20 +41,7 @@ export const FeedPage = () => {
           navigate("/login");
         });
       }
-// could be refactored
-    const fetchComments = () => {
-      getComments(token)
-        .then((data) => {
-          setComments(data.comments);
-          localStorage.setItem("token", data.token);
-        })
-        .catch((err) => {
-          console.error(err);
-          // navigate("/login");
-        }); 
-    };
     fetchPosts();
-    fetchComments();
   }, [token, showMine, navigate]);
 
   console.log("comments", comments);
@@ -99,6 +86,7 @@ export const FeedPage = () => {
                 {selectedPost && (
         <CommentsModal
           post={selectedPost}
+          token={token}
           comments={comments}
           onClose={handleCloseModal}
         />

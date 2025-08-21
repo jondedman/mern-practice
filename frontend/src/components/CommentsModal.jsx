@@ -1,15 +1,32 @@
 import Post from "./Post";
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useState} from "react";
+import { getComments } from "../services/comments";
 
-const CommentsModal = ({post, comments, onClose}) => {
+const CommentsModal = ({post, onClose, token}) => {
+  const [comments, setComments] = useState([]);
   const dialogRef = useRef(null);
 
   useEffect(() => {
     if (dialogRef.current) {
       dialogRef.current.showModal();
     }
-  }, [post]);
 
+        const fetchComments = () => {
+          getComments(token, post._id)
+            .then((data) => {
+              setComments(data.comments);
+              localStorage.setItem("token", data.token);
+            })
+            .catch((err) => {
+              console.error(err);
+            }); 
+        }
+        fetchComments();
+    
+    }, [post, token]);
+
+    console.log("comments:", comments);
+    
   if (!post) return null;
 
 return(
@@ -23,7 +40,7 @@ return(
                 {comments.map(comment => (
                     <div key={comment.id} className="bg-base-200 rounded-lg p-2">
             {/* <p className="font-semibold text-sm">{comment.userName}</p> */}
-                <p className="text-sm">{comment.comment}</p>
+                <p className="text-sm">{comment.text}</p>
           </div>
         ))}
             </div>
