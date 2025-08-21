@@ -21,11 +21,13 @@ const CommentsModal = ({post, onClose, token}) => {
               console.error(err);
             }); 
         }
+        if (post?._id) {
         fetchComments();
+        }
     
     }, [post, token]);
 
-    console.log("comments:", comments);
+    // console.log("comments:", comments);
     
   if (!post) return null;
 
@@ -38,7 +40,7 @@ return(
       {/* Scrollable comments feed */}
             <div className="max-h-60 overflow-y-auto mt-4 space-y-4">
                 {comments.map(comment => (
-                    <div key={comment.id} className="bg-base-200 rounded-lg p-2">
+                    <div key={comment._id} className="bg-base-200 rounded-lg p-2">
             {/* <p className="font-semibold text-sm">{comment.userName}</p> */}
                 <p className="text-sm">{comment.text}</p>
           </div>

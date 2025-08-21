@@ -1,5 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import CommentsModal from "../../src/components/CommentsModal";
+import * as commentsService from "../../src/services/comments";
+import { vi } from "vitest";
 
 describe("CommentsModal", () => {
     beforeEach(() => {
@@ -14,12 +16,13 @@ describe("CommentsModal", () => {
       { id: "2", comment: "Second comment" }
     ];
 
+ vi.spyOn(commentsService, "getComments").mockResolvedValue({ comments: testComments });
     render(
-      <CommentsModal
-        post={testPost}
-        comments={testComments}
-        onClose={() => {}}
-      />
+  <CommentsModal
+    post={testPost}
+    token="testToken"
+    onClose={() => {}}
+  />
     );
 
     // Modal should be present

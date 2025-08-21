@@ -87,7 +87,6 @@ export const FeedPage = () => {
         <CommentsModal
           post={selectedPost}
           token={token}
-          comments={comments}
           onClose={handleCloseModal}
         />
       )}
