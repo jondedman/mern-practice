@@ -56,6 +56,7 @@ async function completeSignupForm() {
 describe("Signup Page", () => {
   beforeEach(() => {
     vi.resetAllMocks();
+
     window.cloudinary = {
     createUploadWidget: vi.fn(() => ({
       open: vi.fn(),

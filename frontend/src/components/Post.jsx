@@ -1,3 +1,4 @@
+
 // import { FaSkullCrossbones, FaCommentAlt } from "react-icons/fa";
 // import timeAgo from "../services/timeAgo";
 // import Like from "./Like";
@@ -81,7 +82,7 @@
 // export default Post;
 
 import { useState } from "react";
-import { FaSkullCrossbones, FaCommentAlt } from "react-icons/fa";
+import { FaSkullCrossbones, FaRegGrimace } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
@@ -169,7 +170,7 @@ const Post = ({post, onCommentClick, fetchedLikes}) => {
           />
           <button onClick={() => onCommentClick(post)} className="btn btn-ghost btn-sm flex-1 gap-2">
           Comment
-            <FaCommentAlt />
+            <FaRegGrimace />
           </button>
         </div>
       </div>

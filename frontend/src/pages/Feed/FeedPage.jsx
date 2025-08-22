@@ -72,9 +72,6 @@ export const FeedPage = () => {
     fetchPosts();
   }, [token, showMine, navigate]);
 
-
-  
-
   // Refetch posts after creating a new one
   const handlePostCreated = () => {
     if (!token) return;

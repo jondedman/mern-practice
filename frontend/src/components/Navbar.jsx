@@ -87,7 +87,8 @@ function NavBar() {
 
   // for the image to work for cloudinary we probably need to return profilePicture from backend or change logic
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("user", user);
+  // console.log("user", user);
+  // console.log("user", user.avatar);
   
 
   return (
