@@ -8,12 +8,19 @@ describe("CommentsModal", () => {
       window.localStorage.clear();
       // mocked to avoid jsdom errors
       window.HTMLDialogElement.prototype.showModal = () => {};
+      // mock user
+        window.localStorage.setItem("user", JSON.stringify({
+        id: "test-user-id",
+        fullname: "Testy McTest",
+        profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+  }));
+
     });
   test("renders a post and its comments", () => {
     const testPost = { _id: "123", message: "test message" };
     const testComments = [
-      { id: "1", comment: "First comment" },
-      { id: "2", comment: "Second comment" }
+      { _id: "1", text: "First comment" },
+      { _id: "2", text: "Second comment" }
     ];
 
  vi.spyOn(commentsService, "getComments").mockResolvedValue({ comments: testComments });
