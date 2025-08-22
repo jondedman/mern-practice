@@ -85,7 +85,7 @@ import { FaSkullCrossbones, FaCommentAlt } from "react-icons/fa";
 import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
-const Post = ({post, onCommentClick}) => {
+const Post = ({post, onCommentClick, fetchedLikes}) => {
   // const token = localStorage.getItem("token");
   // const userId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
   const user = JSON.parse(localStorage.getItem("user"));
@@ -93,7 +93,7 @@ const Post = ({post, onCommentClick}) => {
   // console.log("user in post", user, user.id);
   
   // Maintain likes state locally to update counts on like toggle without reload
-  const [likes, setLikes] = useState([]);
+  const [likes, setLikes] = useState(fetchedLikes || []);
   const postLikes = likes.filter(like => like.post_id === post._id);
   const hasLiked = postLikes.some(like => like.user === userId);
   const likeCount = postLikes.length;

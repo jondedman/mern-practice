@@ -109,7 +109,7 @@ export const FeedPage = () => {
         {/* Posts Feed */}
         <div role="feed" className="flex-1 overflow-y-auto">
           {posts.map((post) => (
-            <Post post={post} key={post._id} onCommentClick={handleCommentClick} likes={likes} />
+            <Post post={post} key={post._id} onCommentClick={handleCommentClick} fetchedLikes={likes} />
           ))}
           {/* renders based on whether there is a selected post */}
                 {selectedPost && (

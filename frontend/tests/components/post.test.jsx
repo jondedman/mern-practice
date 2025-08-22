@@ -8,8 +8,12 @@ import Post from "../../src/components/Post";
 const samplePost = {
   _id: "123",
   message: "Hello world!",
-  createdAt: new Date(Date.now() - 60000).toISOString(), // 1 minute ago
+  createdAt: new Date(Date.now() - 60000).toISOString(),
   commentsCount: 5,
+  author: {
+    fullname: "Testy McTest",
+    profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+  }
 };
 
 const sampleLikes = [
@@ -18,28 +22,35 @@ const sampleLikes = [
 ];
 
 // Mock localStorage token decoding for userId = "user1"
-const originalGetItem = window.localStorage.getItem;
-window.localStorage.getItem = () =>
-  // Create a fake token with payload { sub: "user1" }
-  btoa(
-    JSON.stringify({
-      alg: "HS256",
-      typ: "JWT",
-    })
-  ) +
-  "." +
-  btoa(
-    JSON.stringify({
-      sub: "user1",
-    })
-  ) +
-  ".signature";
+// const originalGetItem = window.localStorage.getItem;
+// window.localStorage.getItem = () =>
+//   // Create a fake token with payload { sub: "user1" }
+//   btoa(
+//     JSON.stringify({
+//       alg: "HS256",
+//       typ: "JWT",
+//     })
+//   ) +
+//   "." +
+//   btoa(
+//     JSON.stringify({
+//       sub: "user1",
+//     })
+//   ) +
+//   ".signature";
 
 describe("Post component", () => {
-  afterAll(() => {
-    // Restore original localStorage.getItem
-    window.localStorage.getItem = originalGetItem;
-  });
+  beforeEach(() => {
+  window.localStorage.setItem("user", JSON.stringify({
+    id: "test-user-id",
+    fullname: "Testy McTest",
+    profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+  }));
+});
+  // afterAll(() => {
+  //   // Restore original localStorage.getItem
+  //   window.localStorage.getItem = originalGetItem;
+  // });
 
   it("renders the post message", () => {
     render(<Post post={samplePost} likes={sampleLikes} />);
