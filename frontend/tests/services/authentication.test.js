@@ -36,13 +36,17 @@ describe("authentication service", () => {
     test("returns the token if the request was a success", async () => {
       const testEmail = "test@testEmail.com";
       const testPassword = "12345678";
+fetch.mockResponseOnce(
+  JSON.stringify({
+    token: "testToken",
+    user: { id: "1", fullname: "Testy McTest", avatar: "", email: "test@testEmail.com" }
+  }),
+  { status: 201 }
+);
 
-      fetch.mockResponseOnce(JSON.stringify({ token: "testToken" }), {
-        status: 201,
-      });
-
-      const token = await login(testEmail, testPassword);
-      expect(token).toEqual("testToken");
+  const result = await login(testEmail, testPassword);
+  expect(result.token).toEqual("testToken");
+  expect(result.user).toEqual({ id: "1", fullname: "Testy McTest", avatar: "", email: "test@testEmail.com" });
     });
 
     test("throws an error if the request failed", async () => {
