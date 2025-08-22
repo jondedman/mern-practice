@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../../services/posts";
+import { getComments } from "../../services/comments";
+import { getLikes } from "../../services/likes";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 import CommentsModal from "../../components/CommentsModal";
@@ -11,6 +13,8 @@ import Footer from "../../components/Footer";
 export const FeedPage = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [showMine, setShowMine] = useState(false);
 
   const handleCommentClick = (post) => {    
@@ -39,10 +43,34 @@ export const FeedPage = () => {
           navigate("/login");
         });
       }
+// could be refactored?
+    const fetchComments = () => {
+      getComments(token)
+        .then((data) => {
+          setComments(data.comments);
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+        }); 
+    };
+
+    const fetchLikes = () => {
+      getLikes(token)
+        .then((data) => {
+          setLikes(data.likes);
+          localStorage.setItem("token", data.token);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      };
+
+
+    fetchComments();
+    fetchLikes();
     fetchPosts();
   }, [token, showMine, navigate]);
-
-  
 
   // Refetch posts after creating a new one
   const handlePostCreated = () => {
@@ -54,6 +82,7 @@ export const FeedPage = () => {
       })
       .catch((err) => {
         console.error(err);
+        // why navigate login on an error?
         navigate("/login");
       });
   };
@@ -77,7 +106,7 @@ export const FeedPage = () => {
         {/* Posts Feed */}
         <div role="feed" className="flex-1 overflow-y-auto">
           {posts.map((post) => (
-            <Post post={post} key={post._id} onCommentClick={handleCommentClick} />
+            <Post post={post} key={post._id} onCommentClick={handleCommentClick} fetchedLikes={likes} />
           ))}
           {/* renders based on whether there is a selected post */}
                 {selectedPost && (

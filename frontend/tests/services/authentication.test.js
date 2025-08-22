@@ -36,12 +36,12 @@ describe("authentication service", () => {
     test("returns the token if the request was a success", async () => {
       const testEmail = "test@testEmail.com";
       const testPassword = "12345678";
-fetch.mockResponseOnce(
-  JSON.stringify({
-    token: "testToken",
-    user: { id: "1", fullname: "Testy McTest", avatar: "", email: "test@testEmail.com" }
-  }),
-  { status: 201 }
+      fetch.mockResponseOnce(
+        JSON.stringify({
+          token: "testToken",
+          user: { id: "1", fullname: "Testy McTest", avatar: "", email: "test@testEmail.com" }
+        }),
+        { status: 201 }
 );
 
   const result = await login(testEmail, testPassword);

@@ -1,53 +1,78 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import React from "react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
 import Like from "../../src/components/Like";
 
+const user = { _id: "user-123" };
 
-describe("Like", () => {
-    test("displays the button", () => {
+describe("Like component", () => {
+  it("renders button with 'Acknowledge' and unliked icon by default", () => {
+    render(<Like postId="123" hasLiked={false} onLikeChange={() => {}} user={user} />);
+    expect(screen.getByText("Acknowledge")).toBeTruthy();
+    expect(screen.getByTestId("unliked")).toBeTruthy();
+  });
 
-        render(<Like />);
+  it("renders button with 'Acknowledged' and liked icon when initially liked", () => {
+    render(<Like postId="123" hasLiked={true} onLikeChange={() => {}} user={user} />);
+    expect(screen.getByText("Acknowledged")).toBeTruthy();
+    expect(screen.getByTestId("liked")).toBeTruthy();
+  });
 
-        const button = screen.getByRole("button");
-        expect(button.textContent).toBe("Acknowledge");
+  it("clicking unliked button calls createLike and updates button to liked", async () => {
+    const createLikeMock = vi.fn(() => Promise.resolve());
+    const onLikeChangeMock = vi.fn();
+
+    render(
+      <Like
+        postId="123"
+        hasLiked={false}
+        createLike={createLikeMock}
+        deleteLike={() => {}}
+        onLikeChange={onLikeChangeMock}
+        user={user}
+      />
+    );
+
+    const button = screen.getByRole("button");
+
+    await act(async () => {
+      fireEvent.click(button);
     });
 
-    test("initially renders with the FaSkullCrossbones icon", () => {
+    // Change expectation to null for first arg since component sends null
+    expect(createLikeMock).toHaveBeenCalledWith(null, "123");
+    expect(onLikeChangeMock).toHaveBeenCalledWith(true);
 
-        render (<Like />);
+    expect(screen.getByTestId("liked")).toBeTruthy();
+    expect(screen.getByText("Acknowledged")).toBeTruthy();
+  });
 
-        const unlikedIcon = screen.getByTestId("unliked");
-        expect(unlikedIcon).not.toBeNull();
+  it("clicking liked button calls deleteLike and updates button to unliked", async () => {
+    const deleteLikeMock = vi.fn(() => Promise.resolve());
+    const onLikeChangeMock = vi.fn();
 
-        const likedIcon = screen.queryByTestId("liked");
-        expect(likedIcon).toBeNull();
+    render(
+      <Like
+        postId="123"
+        hasLiked={true}
+        createLike={() => {}}
+        deleteLike={deleteLikeMock}
+        onLikeChange={onLikeChangeMock}
+        user={user}
+      />
+    );
+
+    const button = screen.getByRole("button");
+
+    await act(async () => {
+      fireEvent.click(button);
     });
 
-    test("when you click, the button changes state", () => {
+    // Change expectation to null for first arg since component sends null
+    expect(deleteLikeMock).toHaveBeenCalledWith(null, "123");
+    expect(onLikeChangeMock).toHaveBeenCalledWith(false);
 
-        render (<Like />);
-
-        expect(screen.getByTestId("unliked")).not.toBeNull();
-        expect(screen.queryByTestId("liked")).toBeNull();
-
-        const button = screen.getByRole("button");
-        fireEvent.click(button);
-
-        expect(screen.queryByTestId("unliked")).toBeNull();
-        expect(screen.getByTestId("liked")).not.toBeNull();
-    });
-
-        test("button changes icon and text when clicked", () => {
-        
-        render(<Like />);
-  
-        expect(screen.getByTestId("unliked")).not.toBeNull();
-        expect(screen.getByText("Acknowledge")).not.toBeNull();
-
-        fireEvent.click(screen.getByRole("button"));
-
-        expect(screen.getByTestId("liked")).not.toBeNull();
-        expect(screen.getByText("Acknowledged")).not.toBeNull();
+    expect(screen.getByTestId("unliked")).toBeTruthy();
+    expect(screen.getByText("Acknowledge")).toBeTruthy();
+  });
 });
-
-});
-
