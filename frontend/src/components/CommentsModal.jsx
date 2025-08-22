@@ -1,6 +1,7 @@
 import Post from "./Post";
 import {useRef, useEffect, useState} from "react";
 import { getComments } from "../services/comments";
+import CommentForm from "./CommentForm";
 
 const CommentsModal = ({post, onClose, token}) => {
   const [comments, setComments] = useState([]);
@@ -25,11 +26,22 @@ const CommentsModal = ({post, onClose, token}) => {
         fetchComments();
         }
     
-    }, [post, token]);
-
-    // console.log("comments:", comments);
-    
+    }, [post, token]);    
   if (!post) return null;
+console.log("post", post);
+
+  // Refetch comments after creating a new one
+  const handleCommentCreated = () => {
+    if (!token) return;
+    getComments(token, post._id)
+      .then((data) => {
+        setComments(data.comments);
+        localStorage.setItem("token", data.token);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
 return(
 <div>
@@ -46,6 +58,7 @@ return(
           </div>
         ))}
             </div>
+        <  CommentForm token={token} post_id={post._id} onCommentCreated={handleCommentCreated}  />
         <div className="modal-action">
             <button className="btn" onClick={onClose}>Close</button>
         </div>

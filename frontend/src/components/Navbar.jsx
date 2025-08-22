@@ -85,14 +85,18 @@ function NavBar() {
   const location = useLocation();
   const path = location.pathname;
 
+  // for the image to work for cloudinary we probably need to return profilePicture from backend or change logic
   const user = JSON.parse(localStorage.getItem("user"));
+  // console.log("user", user);
+  // console.log("user", user.avatar);
+  
 
   return (
     <nav className="flex gap-4 items-center">
       {user ? (
         <>
           <img
-            src={user.avatar}
+  src={user.avatar ? user.avatar : user.profilePicture}
             // alt={user.fullname}
             className="w-8 h-8 rounded-full"
           />
@@ -118,3 +122,4 @@ function NavBar() {
 }
 
 export default NavBar;
+
