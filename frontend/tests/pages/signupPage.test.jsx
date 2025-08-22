@@ -69,7 +69,7 @@ describe("Signup Page", () => {
 
     await completeSignupForm();
 
-    expect(signup).toHaveBeenCalledWith("Testy McTest", "test@email.com", "abcd1234!");
+    expect(signup).toHaveBeenCalledWith("Testy McTest", "test@email.com", "abcd1234!", "");
   });
 
   test("navigates to /login on successful signup", async () => {
