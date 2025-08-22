@@ -86,9 +86,12 @@ import timeAgo from "../services/timeAgo";
 import Like from "./Like";
 
 const Post = ({post, onCommentClick}) => {
-    const token = localStorage.getItem("token");
-  const userId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
-
+  // const token = localStorage.getItem("token");
+  // const userId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.id
+  // console.log("user in post", user, user.id);
+  
   // Maintain likes state locally to update counts on like toggle without reload
   const [likes, setLikes] = useState([]);
   const postLikes = likes.filter(like => like.post_id === post._id);

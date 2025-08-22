@@ -38,13 +38,29 @@ vi.mock("react-router-dom", () => {
 describe("Feed Page", () => {
   beforeEach(() => {
     window.localStorage.removeItem("token");
+    window.localStorage.setItem("user", JSON.stringify({
+    id: "test-user-id",
+    fullname: "Testy McTest",
+    profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+  }));
   });
 
   // replicate test logic for other backend requests
   test("It displays posts from the backend", async () => {
     window.localStorage.setItem("token", "testToken");
 
-    const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+const mockPosts = [
+  {
+    _id: "12345",
+    message: "Test Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 3
+  }
+];
 
     getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
@@ -58,11 +74,38 @@ describe("Feed Page", () => {
 test("It renders posts in backend order (newest first)", async () => {
   window.localStorage.setItem("token", "testToken");
 
-  const mockPosts = [
-    { _id: "12345", message: "Test Post 1" },
-    { _id: "12346", message: "Test Post 2" },
-    { _id: "12347", message: "Test Post 3" }
-  ];
+const mockPosts = [
+  {
+    _id: "12345",
+    message: "Test Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 3
+  },
+  {
+    _id: "12346",
+    message: "Test Post 2",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T13:00:00Z",
+    commentsCount: 1
+  },
+  {
+    _id: "12347",
+    message: "Test Post 3",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T14:00:00Z",
+    commentsCount: 0
+  }
+];
 
   getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
@@ -87,6 +130,12 @@ beforeEach(() => {
   window.localStorage.clear();
   // mocked to avoid jsdom errors
   window.HTMLDialogElement.prototype.showModal = () => {};
+      window.localStorage.removeItem("token");
+    window.localStorage.setItem("user", JSON.stringify({
+    id: "test-user-id",
+    fullname: "Testy McTest",
+    profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+  }));
 });
 
 test("comments modal is not present initially", () => {
@@ -97,7 +146,18 @@ test("comments modal is not present initially", () => {
   test("comments modal opens after clicking comment button", async () => {
     // Arrange: set up mock posts and token
     window.localStorage.setItem("token", "testToken");
-    const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+    const mockPosts = [
+  {
+    _id: "12345",
+    message: "Test Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 3
+  }
+];
     getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
     render(<FeedPage />);
@@ -112,7 +172,18 @@ test("comments modal is not present initially", () => {
 
   test("comments modal contains correct post and comments after opening", async () => {
   window.localStorage.setItem("token", "testToken");
-  const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+const mockPosts = [
+  {
+    _id: "12345",
+    message: "Test Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 3
+  }
+];
   getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
   render(<FeedPage />);
@@ -132,7 +203,18 @@ test("comments modal is not present initially", () => {
 
 test("comments modal closes after clicking close button", async () => {
   window.localStorage.setItem("token", "testToken");
-  const mockPosts = [{ _id: "12345", message: "Test Post 1" }];
+ const mockPosts = [
+  {
+    _id: "12345",
+    message: "Test Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 3
+  }
+];
   getPosts.mockResolvedValue({ posts: mockPosts, token: "newToken" });
 
   render(<FeedPage />);
@@ -163,11 +245,30 @@ test("comments modal does not open if there are no posts", async () => {
 
   })
 describe("FeedPage toggle behaviour", () => {
+    beforeEach(() => {
+    window.localStorage.setItem("user", JSON.stringify({
+      id: "test-user-id",
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    }));
+  });
   // test that toggling the switch fetches only the user's posts
 test("Toggle fetches only my posts and then all posts when toggled back", async () => {
   window.localStorage.setItem("token", "testToken");
 
-  const mockPosts = [{ _id: "1", message: "Hello World" }];
+const mockPosts = [
+  {
+    _id: "1",
+    message: "Hello World",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 2,
+    userId: "user1"
+  }
+];
   getPosts.mockResolvedValue({ posts: mockPosts, token: "testToken" });
 
   render(<FeedPage />);
@@ -206,10 +307,30 @@ test("Toggle with no posts does not break the UI", async () => {
 test("Toggle when all posts belong to the user shows everything", async () => {
   window.localStorage.setItem("token", "testToken");
 
-  const userPosts = [
-    { _id: "1", userId: "user1", message: "Post 1" },
-    { _id: "2", userId: "user1", message: "Post 2" }
-  ];
+const userPosts = [
+  {
+    _id: "1",
+    userId: "user1",
+    message: "Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 2
+  },
+  {
+    _id: "2",
+    userId: "user1",
+    message: "Post 2",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T13:00:00Z",
+    commentsCount: 1
+  }
+];
   getPosts.mockResolvedValue({ posts: userPosts, token: "testToken" });
 
   render(<FeedPage />);
@@ -229,10 +350,30 @@ test("Toggle when all posts belong to the user shows everything", async () => {
 test("Rapid toggle does not create duplicate posts or race conditions", async () => {
   window.localStorage.setItem("token", "testToken");
 
-  const mixedPosts = [
-    { _id: "1", userId: "user1", message: "Post 1" },
-    { _id: "2", userId: "user2", message: "Post 2" }
-  ];
+const mixedPosts = [
+  {
+    _id: "1",
+    userId: "user1",
+    message: "Post 1",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T12:00:00Z",
+    commentsCount: 2
+  },
+  {
+    _id: "2",
+    userId: "user2",
+    message: "Post 2",
+    author: {
+      fullname: "Testy McTest",
+      profilePicture: "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    },
+    createdAt: "2024-08-22T13:00:00Z",
+    commentsCount: 1
+  }
+];
   getPosts.mockResolvedValue({ posts: mixedPosts, token: "testToken" });
 
   render(<FeedPage />);
