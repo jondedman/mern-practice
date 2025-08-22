@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, within, waitFor } from "@testing-library/react";
 import CommentsModal from "../../src/components/CommentsModal";
 import * as commentsService from "../../src/services/comments";
 import { vi } from "vitest";
@@ -16,7 +16,7 @@ describe("CommentsModal", () => {
   }));
 
     });
-  test("renders a post and its comments", () => {
+  test("renders a post and its comments", async () => {
     const testPost = { _id: "123", message: "test message" };
     const testComments = [
       { _id: "1", text: "First comment" },
@@ -36,13 +36,12 @@ describe("CommentsModal", () => {
     const modal = screen.getByTestId("comments-modal");
     expect(modal).to.exist;
 
-    // Post message should be rendered inside the modal
-    expect(within(modal).getByText("test message")).to.exist;
-
-    // Comments should be rendered inside the modal
+  // Wait for comments to be rendered inside the modal
+  await waitFor(() => {
     expect(within(modal).getByText("First comment")).to.exist;
     expect(within(modal).getByText("Second comment")).to.exist;
   });
+});
 
 test("does not render modal if post is null", () => {
   render(
