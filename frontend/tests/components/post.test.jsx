@@ -53,19 +53,19 @@ describe("Post component", () => {
   // });
 
   it("renders the post message", () => {
-    render(<Post post={samplePost} likes={sampleLikes} />);
+    render(<Post post={samplePost} fetchedLikes={sampleLikes} />);
     const element = screen.queryByText("Hello world!");
     expect(element).to.not.be.null;
   });
 
   it("displays the correct number of villains (likes)", () => {
-    render(<Post post={samplePost} likes={sampleLikes} />);
+    render(<Post post={samplePost} fetchedLikes={sampleLikes} />);
     const villainsText = screen.queryByText(/2 villains/i);
     expect(villainsText).to.not.be.null;
   });
 
   it("displays the correct number of comments", () => {
-    render(<Post post={samplePost} likes={sampleLikes} />);
+    render(<Post post={samplePost} fetchedLikes={sampleLikes} />);
     const commentsText = screen.queryByText(/5 comments/i);
     expect(commentsText).to.not.be.null;
   });
